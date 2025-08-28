@@ -35,6 +35,7 @@
   background: #dddddd;
 }
 
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #5c5c7b;
   border-radius: 50px;
@@ -110,6 +111,8 @@
     @apply no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll;
   }
 
+
+
   .home-content {
     @apply no-scrollbar flex w-full flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll;
   }
@@ -159,9 +162,11 @@
     @apply no-scrollbar hidden h-screen max-h-screen flex-col border-l border-gray-200 xl:flex w-[355px] xl:overflow-y-scroll !important;
   }
 
-  .profile-banner {
-    @apply h-[120px] w-full bg-gradient-mesh bg-cover bg-no-repeat;
-  }
+.profile-banner {
+  @apply h-[120px] w-full bg-cover bg-no-repeat;
+  background-image: url('/gradient-mesh.svg');
+}
+
 
   .profile {
     @apply relative flex px-6 max-xl:justify-center;
@@ -294,6 +299,10 @@
 
   .form-btn {
     @apply text-16 rounded-lg border border-bankGradient bg-bank-gradient font-semibold text-white shadow-form;
+  }
+
+   .text-bankGradient {
+    @apply bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent;
   }
 
   .form-link {
