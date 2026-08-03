@@ -33,6 +33,12 @@ export const getSummary = async (req, res) => {
     const incomeLastMonth = parseFloat(row.income_last_month);
     const expenseLastMonth = parseFloat(row.expense_last_month);
     const balance = incomeThisMonth - expenseThisMonth;
+    // also include sum of linked bank account balances for display
+    const acctRes = await pool.query(
+      `SELECT COALESCE(SUM(balance),0) AS account_balance FROM bank_accounts WHERE user_id = $1`,
+      [req.userId],
+    );
+    const accountBalance = parseFloat(acctRes.rows[0].account_balance || 0);
     const savingsRate =
       incomeThisMonth > 0 ? (balance / incomeThisMonth) * 100 : 0;
 
@@ -40,6 +46,7 @@ export const getSummary = async (req, res) => {
       incomeThisMonth,
       expenseThisMonth,
       balance,
+      accountBalance,
       savingsRate,
       incomeDelta: pctChange(incomeThisMonth, incomeLastMonth),
       expenseDelta: pctChange(expenseThisMonth, expenseLastMonth),

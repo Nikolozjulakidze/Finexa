@@ -5,8 +5,60 @@
   --font-sans:
     "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
-  /* --font-sans: "Inter", "Inter var", ui-sans-serif, system-ui, -apple-system,
-        Segoe UI, Roboto, sans-serif; */
+}
+
+/* ============================================================
+   Professional Finance Color System
+   Light mode: clean white
+   Dark mode: sophisticated dark blue
+   ============================================================ */
+
+:root {
+  /* Light mode — white theme */
+  --background: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --sidebar-bg: #f8fafc;
+
+  /* Accent — professional dark blue */
+  --accent: #1e3a8a;
+  --accent-hover: #1e40af;
+  --accent-gradient-from: #3b82f6;
+  --accent-gradient-to: #1e3a8a;
+  --accent-bg: rgba(30, 58, 138, 0.08);
+
+  /* Semantic colors (shared across modes) */
+  --income: #10b981;
+  --income-bg: rgba(16, 185, 129, 0.08);
+  --expense: #ef4444;
+  --expense-bg: rgba(239, 68, 68, 0.08);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.08);
+}
+
+.dark {
+  /* Dark mode — dark blue theme */
+  --background: #0f172a;
+  --surface: #1e293b;
+  --surface-alt: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --border: #334155;
+  --border-hover: #475569;
+  --sidebar-bg: #0f172a;
+
+  /* Accent — vibrant blue for dark mode */
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent-gradient-from: #3b82f6;
+  --accent-gradient-to: #2563eb;
+  --accent-bg: rgba(59, 130, 246, 0.12);
 }
 
 html,
@@ -17,12 +69,260 @@ body,
 
 body {
   font-family: var(--font-sans);
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: var(--background);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
+/* ============================================================
+   Common card and surface utilities
+   ============================================================ */
+.card-style {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(15, 23, 42, 0.03);
+}
+
+.dark .card-style {
+  box-shadow: 0 4px 6px rgba(2, 6, 23, 0.3);
+}
+
+.shadow-soft {
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+}
+
+.dark .shadow-soft {
+  box-shadow: 0 4px 20px rgba(2, 6, 23, 0.4);
+}
+
+.shadow-strong {
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.dark .shadow-strong {
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.5);
+}
+
+/* Accent gradient */
+.bg-accent {
+  background: linear-gradient(
+    135deg,
+    var(--accent-gradient-from),
+    var(--accent-gradient-to)
+  );
+}
+
+.bg-accent-2 {
+  background: linear-gradient(135deg, var(--accent-bg), var(--accent-bg));
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+/* Focus ring using accent color */
+.focus-ring-accent:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--accent-bg);
+  border-color: var(--accent);
+}
+
+@keyframes floatLogo {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 20px rgba(201, 155, 60, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 50px rgba(201, 155, 60, 0.5);
+  }
+
+  100% {
+    box-shadow: 0 0 20px rgba(201, 155, 60, 0.2);
+  }
+}
+
+.hero-card {
+  animation: fadeUp 0.8s ease;
+}
+
+.logo-float {
+  animation: floatLogo 5s ease-in-out infinite;
+}
+
+.gold-glow {
+  animation: glow 4s ease infinite;
+}
+
+.office-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+    url("https://images.unsplash.com/photo-1497366412874-3415097a27e7?q=80&w=1800&auto=format&fit=crop");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.dark .office-bg {
+  background-image:
+    linear-gradient(rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.75)),
+    url("https://images.unsplash.com/photo-1497366412874-3415097a27e7?q=80&w=1800&auto=format&fit=crop");
+}
+
+/* Input field base style */
+.input-field {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 12px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: var(--accent);
+}
+
+.input-field::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   Make common Tailwind utility classes respect theme variables
+   in dark mode.
+   ============================================================ */
+.dark .bg-white {
+  background-color: var(--surface) !important;
+}
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-slate-200 {
+  background-color: var(--surface) !important;
+}
+.dark .bg-slate-50\/50,
+.dark .bg-slate-100\/50 {
+  background-color: var(--surface) !important;
+}
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: var(--text-secondary) !important;
+}
+.dark .text-slate-700,
+.dark .text-slate-800,
+.dark .text-slate-900 {
+  color: var(--text-primary) !important;
+}
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300 {
+  border-color: var(--border) !important;
+}
+.dark .hover\:bg-slate-50:hover {
+  background-color: var(--surface) !important;
+}
+.dark .hover\:bg-border-color:hover {
+  background-color: var(--border) !important;
+}
+
+/* ============================================================
+   Recharts theming
+   ============================================================ */
+.recharts-wrapper svg:focus,
+.recharts-wrapper *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.recharts-tooltip-wrapper {
+  border-radius: 12px !important;
+  font-size: 12px !important;
+}
+
+.dark .recharts-tooltip-wrapper {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 6px 24px rgba(2, 6, 23, 0.6) !important;
+  color: var(--text-primary) !important;
+}
+
+.recharts-tooltip-wrapper {
+  background-color: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.15) !important;
+  color: #0f172a !important;
+}
+
+.recharts-tooltip-wrapper,
+.recharts-tooltip-wrapper *,
+.recharts-default-tooltip,
+.recharts-default-tooltip * {
+  color: var(--text-primary) !important;
+}
+
+.dark .recharts-tooltip-wrapper,
+.dark .recharts-tooltip-wrapper *,
+.dark .recharts-default-tooltip,
+.dark .recharts-default-tooltip * {
+  color: var(--text-primary) !important;
+}
+
+.recharts-wrapper .recharts-pie-sector:focus,
+.recharts-wrapper .recharts-pie-sector *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
 @keyframes scrollUp {
   from {
     transform: translateY(0);
@@ -39,4 +339,38 @@ body {
   to {
     transform: translateY(0);
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================================
+   Toast styling (react-hot-toast)
+   ============================================================ */
+.toast-success {
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }

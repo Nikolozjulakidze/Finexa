@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const BalanceCard = () => (
-  <div className="bg-linear-to-br from-violet-600 via-violet-700 to-violet-800 rounded-2xl p-5 text-white shadow-xl shadow-violet-300/40 relative overflow-hidden">
+  <div className="bg-linear-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-5 text-white shadow-xl shadow-blue-300/40 relative overflow-hidden">
     <div className="absolute -top-8 -right-8 h-24 w-24 bg-white/10 rounded-full blur-2xl" />
     <div className="relative flex items-center justify-between mb-4">
       <div className="text-xs font-medium opacity-80">Total Balance</div>
@@ -27,19 +27,19 @@ const BalanceCard = () => (
 );
 
 const AIInsightCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-lg shadow-violet-100 border border-slate-100">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
     <div className="flex items-start gap-2.5">
-      <div className="h-9 w-9 rounded-xl bg-linear-to-br from-violet-400 to-violet-600 flex items-center justify-center shrink-0">
+      <div className="h-9 w-9 rounded-xl bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center shrink-0">
         <Sparkles size={16} className="text-white" />
       </div>
       <div className="min-w-0">
-        <div className="text-[10px] uppercase tracking-wider font-bold text-violet-600 mb-0.5">
+        <div className="text-[10px] uppercase tracking-wider font-bold text-accent mb-0.5">
           AI Insight
         </div>
-        <div className="text-xs font-semibold text-slate-900 mb-0.5">
+        <div className="text-xs font-semibold text-text-primary mb-0.5">
           Coffee budget alert
         </div>
-        <p className="text-[11px] text-slate-600 leading-relaxed">
+        <p className="text-[11px] text-text-secondary leading-relaxed">
           Cut 2 cups/week → save $32/mo
         </p>
       </div>
@@ -48,37 +48,37 @@ const AIInsightCard = () => (
 );
 
 const BudgetProgressCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
     <div className="flex items-center gap-2 mb-3">
-      <div className="h-8 w-8 rounded-lg bg-amber-50 flex items-center justify-center">
-        <Utensils size={14} className="text-amber-600" />
+      <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+        <Utensils size={14} className="text-amber-500" />
       </div>
       <div>
-        <div className="text-xs font-semibold text-slate-900">
+        <div className="text-xs font-semibold text-text-primary">
           Food & Dining
         </div>
-        <div className="text-[10px] text-slate-500">May 2026</div>
+        <div className="text-[10px] text-text-secondary">May 2026</div>
       </div>
     </div>
     <div className="flex items-baseline justify-between mb-1.5">
-      <span className="text-base font-bold text-slate-900">$320</span>
-      <span className="text-[10px] text-slate-500">of $400</span>
+      <span className="text-base font-bold text-text-primary">$320</span>
+      <span className="text-[10px] text-text-secondary">of $400</span>
     </div>
-    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+    <div className="h-1.5 bg-surface-alt rounded-full overflow-hidden">
       <div
         className="h-full bg-amber-500 rounded-full"
         style={{ width: "80%" }}
       />
     </div>
-    <div className="text-[10px] text-amber-600 font-medium mt-1.5">
+    <div className="text-[10px] text-amber-500 font-medium mt-1.5">
       80% used
     </div>
   </div>
 );
 
 const SubscriptionsCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
-    <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-3">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
+    <div className="text-[10px] uppercase tracking-wider text-text-secondary font-bold mb-3">
       Subscriptions
     </div>
     <div className="space-y-2.5">
@@ -99,11 +99,11 @@ const SubscriptionsCard = () => (
             >
               {s.initial}
             </div>
-            <span className="text-[11px] font-medium text-slate-900">
+            <span className="text-[11px] font-medium text-text-primary">
               {s.name}
             </span>
           </div>
-          <span className="text-[11px] font-semibold text-slate-700">
+          <span className="text-[11px] font-semibold text-text-secondary">
             {s.cost}
           </span>
         </div>
@@ -113,29 +113,29 @@ const SubscriptionsCard = () => (
 );
 
 const IncomeExpenseCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
-    <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-2">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
+    <div className="text-[10px] uppercase tracking-wider text-text-secondary font-bold mb-2">
       Income vs Expense
     </div>
     <div className="grid grid-cols-2 gap-3 mb-3">
       <div>
-        <div className="text-[10px] text-slate-500">Income</div>
-        <div className="text-base font-bold text-violet-600">$6.3k</div>
+        <div className="text-[10px] text-text-secondary">Income</div>
+        <div className="text-base font-bold text-emerald-500">$6.3k</div>
       </div>
       <div>
-        <div className="text-[10px] text-slate-500">Expense</div>
-        <div className="text-base font-bold text-orange-600">$2.4k</div>
+        <div className="text-[10px] text-text-secondary">Expense</div>
+        <div className="text-base font-bold text-amber-500">$2.4k</div>
       </div>
     </div>
     <div className="flex items-end gap-1 h-10">
       {[55, 70, 45, 80, 65, 75].map((h, i) => (
         <div key={i} className="flex-1 flex flex-col gap-0.5 justify-end">
           <div
-            className="bg-violet-400 rounded-sm"
+            className="bg-emerald-400 rounded-sm"
             style={{ height: `${h}%`, minHeight: "4px" }}
           />
           <div
-            className="bg-orange-400 rounded-sm"
+            className="bg-amber-400 rounded-sm"
             style={{ height: `${h * 0.45}%`, minHeight: "2px" }}
           />
         </div>
@@ -145,51 +145,53 @@ const IncomeExpenseCard = () => (
 );
 
 const MonthlySummaryCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
     <div className="flex items-center justify-between mb-3">
-      <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">
+      <div className="text-[10px] uppercase tracking-wider text-text-secondary font-bold">
         May 2026
       </div>
-      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full font-bold">
+      <span className="text-[10px] text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-full font-bold">
         Healthy
       </span>
     </div>
-    <div className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
+    <div className="text-2xl font-bold tracking-tight text-text-primary mb-1">
       $3,936
     </div>
-    <div className="text-[10px] text-slate-500">Net this month</div>
-    <div className="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+    <div className="text-[10px] text-text-secondary">Net this month</div>
+    <div className="mt-3 h-1.5 bg-surface-alt rounded-full overflow-hidden">
       <div
-        className="h-full bg-linear-to-r from-violet-500 to-violet-700 rounded-full"
+        className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full"
         style={{ width: "62%" }}
       />
     </div>
-    <div className="text-[10px] text-slate-500 mt-1.5">62% savings rate</div>
+    <div className="text-[10px] text-text-secondary mt-1.5">
+      62% savings rate
+    </div>
   </div>
 );
 
 const RecentTransactionsCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
-    <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-3">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
+    <div className="text-[10px] uppercase tracking-wider text-text-secondary font-bold mb-3">
       Recent
     </div>
     <div className="space-y-2.5">
       {[
         {
           icon: ShoppingBag,
-          color: "bg-blue-50 text-blue-600",
+          color: "bg-blue-500/10 text-blue-500",
           name: "Whole Foods",
           amount: "-$87.00",
         },
         {
           icon: Coffee,
-          color: "bg-amber-50 text-amber-600",
+          color: "bg-amber-500/10 text-amber-500",
           name: "Starbucks",
           amount: "-$6.45",
         },
         {
           icon: TrendingUp,
-          color: "bg-emerald-50 text-emerald-600",
+          color: "bg-emerald-500/10 text-emerald-500",
           name: "Salary",
           amount: "+$5,500",
           positive: true,
@@ -202,12 +204,12 @@ const RecentTransactionsCard = () => (
             >
               <t.icon size={12} />
             </div>
-            <span className="text-[11px] font-medium text-slate-900 truncate">
+            <span className="text-[11px] font-medium text-text-primary truncate">
               {t.name}
             </span>
           </div>
           <span
-            className={`text-[11px] font-semibold ${t.positive ? "text-emerald-600" : "text-slate-700"}`}
+            className={`text-[11px] font-semibold ${t.positive ? "text-emerald-500" : "text-text-secondary"}`}
           >
             {t.amount}
           </span>
@@ -218,8 +220,8 @@ const RecentTransactionsCard = () => (
 );
 
 const CategoryDonutCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
-    <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-3">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
+    <div className="text-[10px] uppercase tracking-wider text-text-secondary font-bold mb-3">
       Top Categories
     </div>
     <div className="flex items-center gap-3">
@@ -230,7 +232,7 @@ const CategoryDonutCard = () => (
             cy="18"
             r="14"
             fill="none"
-            stroke="#E2E8F0"
+            stroke="var(--border)"
             strokeWidth="6"
           />
           <circle
@@ -238,7 +240,7 @@ const CategoryDonutCard = () => (
             cy="18"
             r="14"
             fill="none"
-            stroke="#7C3AED"
+            stroke="#3B82F6"
             strokeWidth="6"
             strokeDasharray="35 88"
             strokeLinecap="round"
@@ -248,7 +250,7 @@ const CategoryDonutCard = () => (
             cy="18"
             r="14"
             fill="none"
-            stroke="#EA580C"
+            stroke="#F59E0B"
             strokeWidth="6"
             strokeDasharray="22 88"
             strokeDashoffset="-37"
@@ -259,7 +261,7 @@ const CategoryDonutCard = () => (
             cy="18"
             r="14"
             fill="none"
-            stroke="#2563EB"
+            stroke="#10B981"
             strokeWidth="6"
             strokeDasharray="16 88"
             strokeDashoffset="-61"
@@ -269,9 +271,9 @@ const CategoryDonutCard = () => (
       </div>
       <div className="space-y-1.5 flex-1 min-w-0">
         {[
-          { name: "Food", value: "$320", color: "bg-violet-500" },
-          { name: "Rent", value: "$1.8k", color: "bg-orange-500" },
-          { name: "Travel", value: "$240", color: "bg-blue-500" },
+          { name: "Food", value: "$320", color: "bg-blue-500" },
+          { name: "Rent", value: "$1.8k", color: "bg-amber-500" },
+          { name: "Travel", value: "$240", color: "bg-emerald-500" },
         ].map((c) => (
           <div
             key={c.name}
@@ -279,9 +281,9 @@ const CategoryDonutCard = () => (
           >
             <div className="flex items-center gap-1.5">
               <div className={`h-1.5 w-1.5 rounded-full ${c.color}`} />
-              <span className="text-slate-600 font-medium">{c.name}</span>
+              <span className="text-text-secondary font-medium">{c.name}</span>
             </div>
-            <span className="text-slate-900 font-semibold">{c.value}</span>
+            <span className="text-text-primary font-semibold">{c.value}</span>
           </div>
         ))}
       </div>
@@ -290,25 +292,25 @@ const CategoryDonutCard = () => (
 );
 
 const SavingsGoalCard = () => (
-  <div className="bg-linear-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-4 shadow-md border border-slate-100">
+  <div className="bg-linear-to-br from-emerald-50 via-surface to-surface-alt rounded-2xl p-4 shadow-md border border-border-color">
     <div className="flex items-center gap-2 mb-3">
       <div className="h-8 w-8 rounded-lg bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
         <Plane size={14} className="text-white" />
       </div>
       <div>
-        <div className="text-xs font-semibold text-slate-900">
+        <div className="text-xs font-semibold text-text-primary">
           Vacation Fund
         </div>
-        <div className="text-[10px] text-slate-500">Goal: $5,000</div>
+        <div className="text-[10px] text-text-secondary">Goal: $5,000</div>
       </div>
     </div>
     <div className="flex items-baseline justify-between mb-1.5">
-      <span className="text-lg font-bold tracking-tight text-slate-900">
+      <span className="text-lg font-bold tracking-tight text-text-primary">
         $3,240
       </span>
-      <span className="text-[10px] text-emerald-600 font-bold">65%</span>
+      <span className="text-[10px] text-emerald-500 font-bold">65%</span>
     </div>
-    <div className="h-1.5 bg-white rounded-full overflow-hidden">
+    <div className="h-1.5 bg-surface-alt rounded-full overflow-hidden">
       <div
         className="h-full bg-linear-to-r from-emerald-400 to-blue-500 rounded-full"
         style={{ width: "65%" }}
@@ -318,34 +320,36 @@ const SavingsGoalCard = () => (
 );
 
 const UpcomingBillCard = () => (
-  <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-100">
+  <div className="bg-surface rounded-2xl p-4 shadow-md border border-border-color">
     <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-xl bg-rose-50 flex items-center justify-center shrink-0">
-        <Calendar size={16} className="text-rose-600" />
+      <div className="h-10 w-10 rounded-xl bg-rose-500/10 flex items-center justify-center shrink-0">
+        <Calendar size={16} className="text-rose-500" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-[10px] uppercase tracking-wider text-rose-600 font-bold">
+        <div className="text-[10px] uppercase tracking-wider text-rose-500 font-bold">
           Due in 2 days
         </div>
-        <div className="text-xs font-semibold text-slate-900">Rent payment</div>
+        <div className="text-xs font-semibold text-text-primary">
+          Rent payment
+        </div>
       </div>
-      <div className="text-sm font-bold text-slate-900">$1,800</div>
+      <div className="text-sm font-bold text-text-primary">$1,800</div>
     </div>
   </div>
 );
 
 const PortfolioCard = () => (
-  <div className="bg-slate-900 rounded-2xl p-4 text-white shadow-xl">
+  <div className="bg-surface-alt rounded-2xl p-4 text-text-primary shadow-xl border border-border-color">
     <div className="flex items-center justify-between mb-3">
-      <div className="text-[10px] uppercase tracking-wider opacity-60 font-bold">
+      <div className="text-[10px] uppercase tracking-wider text-text-secondary font-bold">
         Investments
       </div>
-      <Receipt size={12} className="opacity-60" />
+      <Receipt size={12} className="text-text-tertiary" />
     </div>
     <div className="text-2xl font-bold tracking-tight mb-1">$8,420.55</div>
     <div className="flex items-center gap-1.5 text-[11px]">
-      <span className="text-emerald-400 font-semibold">+$182.30</span>
-      <span className="opacity-50">today</span>
+      <span className="text-emerald-500 font-semibold">+$182.30</span>
+      <span className="text-text-tertiary">today</span>
     </div>
     <div className="mt-3 h-10">
       <svg
@@ -391,66 +395,67 @@ const column2 = [
   <PortfolioCard key="portfolio" />,
 ];
 
-const AuthHero = ({ headline, subheadline }) => (
-  <div className="relative h-full w-full overflow-hidden bg-linear-to-br from-violet-100 via-violet-50 to-white">
-    {/* <div className="absolute -top-32 -left-24 w-96 h-96 bg-violet-300/40 rounded-full blur-3xl pointer-events-none z-0" /> */}
-    <div className="absolute top-1/2 -right-24 w-80 h-80 bg-pink-200/30 rounded-full blur-3xl pointer-events-none z-0" />
+const AuthHero = ({ headline, subheadline }) => {
+  const col1 = [...column1, ...column1, ...column2];
+  const col2 = [...column2, ...column2, ...column2];
+  const col3 = [...column1, ...column1, ...column2];
 
-    {/* Full-height tilted card columns */}
-    <div className="absolute inset-0 overflow-hidden z-10">
-      <div
-        className="absolute -inset-40 flex gap-4"
-        style={{ transform: "rotate(-7deg)" }}
-      >
-        <div className="flex-1 min-w-0">
-          <div style={{ animation: "scrollUp 45s linear infinite" }}>
-            {[...column1, ...column1, ...column2]
-              .sort(() => Math.random() - 0.5)
-              .map((card, i) => (
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-linear-to-br from-surface via-surface-alt to-surface">
+      <div className="absolute top-1/2 -right-24 w-80 h-80 bg-rose-200/30 rounded-full blur-3xl pointer-events-none z-0" />
+
+      {/* Full-height tilted card columns */}
+      <div className="absolute inset-0 overflow-hidden z-10">
+        <div
+          className="absolute -inset-40 flex gap-4"
+          style={{ transform: "rotate(-7deg)" }}
+        >
+          <div className="flex-1 min-w-0">
+            <div style={{ animation: "scrollUp 45s linear infinite" }}>
+              {col1.map((card, i) => (
                 <div key={i} className="pb-4">
                   {card}
                 </div>
               ))}
+            </div>
           </div>
-        </div>
 
-        <div className="flex-1 min-w-0">
-          <div style={{ animation: "scrollDown 45s linear infinite" }}>
-            {[...column2, ...column2, ...column2].map((card, i) => (
-              <div key={i} className="pb-4">
-                {card}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <div style={{ animation: "scrollUp 45s linear infinite" }}>
-            {[...column1, ...column1, ...column2]
-              .sort(() => Math.random() - 0.5)
-              .map((card, i) => (
+          <div className="flex-1 min-w-0">
+            <div style={{ animation: "scrollDown 45s linear infinite" }}>
+              {col2.map((card, i) => (
                 <div key={i} className="pb-4">
                   {card}
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div style={{ animation: "scrollUp 45s linear infinite" }}>
+              {col3.map((card, i) => (
+                <div key={i} className="pb-4">
+                  {card}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    {/* Top fade — gives the headline a clean backdrop */}
-    <div className="absolute top-0 left-0 right-0 h-64 bg-linear-to-b from-violet-100 via-violet-50/90 to-transparent pointer-events-none z-20" />
-    {/* Bottom fade */}
-    <div className="absolute bottom-0 left-0 right-0 h-40 bg-linear-to-t from-white via-white/70 to-transparent pointer-events-none z-20" />
+      {/* Top fade — gives the headline a clean backdrop */}
+      <div className="absolute top-0 left-0 right-0 h-64 bg-linear-to-b from-surface via-surface/90 to-transparent pointer-events-none z-20" />
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-linear-to-t from-surface via-surface/70 to-transparent pointer-events-none z-20" />
 
-    {/* Headline floats on top */}
-    <div className="absolute top-10 left-10 xl:top-14 xl:left-14 z-30 max-w-[70%]">
-      <h1 className="text-5xl xl:text-6xl font-normal tracking-tight text-slate-900 mb-2">
-        {headline}
-      </h1>
-      <p className="text-base text-slate-600">{subheadline}</p>
+      {/* Headline floats on top */}
+      <div className="absolute top-10 left-10 xl:top-14 xl:left-14 z-30 max-w-[70%]">
+        <h1 className="text-5xl xl:text-6xl font-normal tracking-tight text-text-primary mb-2">
+          {headline}
+        </h1>
+        <p className="text-base text-text-secondary">{subheadline}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default AuthHero;

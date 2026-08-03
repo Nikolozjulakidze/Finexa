@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import pool from "../db.js";
 
-export const protect = (req, res, next) => {
+export const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -11,6 +12,12 @@ export const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const result = await pool.query("SELECT id FROM users WHERE id = $1", [
+      decoded.userId,
+    ]);
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "Not authorized, invalid user" });
+    }
     req.userId = decoded.userId;
     next();
   } catch (error) {

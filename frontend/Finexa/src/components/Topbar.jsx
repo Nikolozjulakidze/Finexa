@@ -1,5 +1,6 @@
 import { Bell, Search } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
+import ThemeToggleButton from "./ThemeToggleButton.jsx";
 
 const greeting = () => {
   const h = new Date().getHours();
@@ -20,28 +21,33 @@ const Topbar = () => {
   const firstName = user?.name?.split(" ")[0] || "";
 
   return (
-    <header className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-6 shrink-0">
+    <header className="h-20 bg-surface border-b border-border-color flex items-center justify-between px-6 shrink-0">
       <div>
-        <div className="text-sm font-semibold text-slate-900 tracking-tight">
+        <div className="text-lg font-semibold text-text-primary tracking-tight">
           {greeting()}
           {firstName && `, ${firstName}`} 👋
         </div>
-        <div className="text-xs text-slate-500">{formatToday()}</div>
+        <div className="text-xs text-text-secondary">{formatToday()}</div>
       </div>
 
-      <div className="flex items-center gap-1">
-        <button
-          title="Search"
-          className="h-9 w-9 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 flex items-center justify-center transition"
-        >
-          <Search size={17} />
-        </button>
+      <div className="flex items-center gap-3">
+        <div className="relative hidden sm:block">
+          <input
+            placeholder="Search transactions, categories..."
+            className="px-4 py-2 pr-10 rounded-full input-field text-sm focus-ring-accent w-80"
+          />
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 text-text-tertiary">
+            <Search size={16} />
+          </div>
+        </div>
+
+        <ThemeToggleButton />
         <button
           title="Notifications"
-          className="relative h-9 w-9 rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 flex items-center justify-center transition"
+          className="relative h-10 w-10 rounded-full text-text-secondary hover:bg-surface-alt hover:text-text-primary flex items-center justify-center transition"
         >
-          <Bell size={17} />
-          <span className="absolute top-2 right-2 h-2 w-2 bg-rose-500 rounded-full ring-2 ring-white" />
+          <Bell size={18} />
+          <span className="absolute top-2 right-2 h-2 w-2 bg-rose-500 rounded-full ring-2 ring-surface" />
         </button>
       </div>
     </header>

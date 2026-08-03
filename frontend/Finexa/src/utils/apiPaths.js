@@ -10,6 +10,13 @@ export const API_PATHS = {
     UPDATE: (id) => `/categories/${id}`,
     DELETE: (id) => `/categories/${id}`,
   },
+  CARDS: {
+    LIST: "/cards",
+    CREATE: "/cards",
+    GET_BY_ID: (id) => `/cards/${id}`,
+    UPDATE: (id) => `/cards/${id}`,
+    DELETE: (id) => `/cards/${id}`,
+  },
   TRANSACTIONS: {
     LIST: "/transactions",
     CREATE: "/transactions",
@@ -33,6 +40,17 @@ export const API_PATHS = {
   INSIGHTS: {
     LIST: "/insights",
     GENERATE: "/insights/generate",
+  },
+  PLAID: {
+    LINK_TOKEN: "/plaid/link-token",
+    EXCHANGE_TOKEN: "/plaid/exchange-token",
+    CONNECTIONS: "/plaid/connections",
+    ACCOUNTS: "/plaid/accounts",
+    SYNC: (connectionId) => `/plaid/sync/${connectionId}`,
+  },
+  ACCOUNTS: {
+    IMPORT: (connectionId) => `/accounts/import/${connectionId}`,
+    SYNC: (connectionId) => `/accounts/sync/${connectionId}`,
   },
 };
 

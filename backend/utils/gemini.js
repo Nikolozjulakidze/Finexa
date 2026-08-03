@@ -43,6 +43,10 @@ const askAI = async (prompt) => {
   return stripMarkdown(response.choices[0].message.content);
 };
 
+export const chatRaw = async (prompt) => {
+  return askAI(prompt);
+};
+
 export const generateMonthlyInsight = async ({
   totalIncome,
   totalExpenses,

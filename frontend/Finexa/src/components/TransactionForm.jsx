@@ -8,11 +8,12 @@ import Select from "./ui/Select.jsx";
 import Textarea from "./ui/Textarea.jsx";
 import Button from "./ui/Button.jsx";
 
-const TransactionForm = ({ initial, categories, onSaved, onCancel }) => {
+const TransactionForm = ({ initial, categories, cards, onSaved, onCancel }) => {
   const [form, setForm] = useState({
     type: initial?.type || "expense",
     amount: initial?.amount || "",
     categoryId: initial?.category_id || "",
+    cardId: initial?.card_id || "",
     description: initial?.description || "",
     notes: initial?.notes || "",
     transactionDate:
@@ -21,6 +22,7 @@ const TransactionForm = ({ initial, categories, onSaved, onCancel }) => {
   const [saving, setSaving] = useState(false);
 
   const filteredCategories = categories.filter((c) => c.type === form.type);
+  const filteredCards = cards.filter((c) => c.type === form.type);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ const TransactionForm = ({ initial, categories, onSaved, onCancel }) => {
         type: form.type,
         amount: parseFloat(form.amount),
         categoryId: form.categoryId || null,
+        cardId: form.cardId || null,
         description: form.description || null,
         notes: form.notes || null,
         transactionDate: form.transactionDate,
@@ -51,25 +54,29 @@ const TransactionForm = ({ initial, categories, onSaved, onCancel }) => {
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
-          onClick={() => setForm({ ...form, type: "expense", categoryId: "" })}
-          className={`py-2 px-4 rounded-lg text-sm font-medium transition ${
+          onClick={() =>
+            setForm({ ...form, type: "expense", categoryId: "", cardId: "" })
+          }
+          className={`py-2 px-4 rounded-xl text-sm font-semibold transition ${
             form.type === "expense"
-              ? "bg-rose-500 text-white"
-              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              ? "bg-rose-600 text-white"
+              : "bg-card-background text-text-secondary hover:bg-border-color"
           }`}
         >
           Expense
         </button>
         <button
           type="button"
-          onClick={() => setForm({ ...form, type: "income", categoryId: "" })}
-          className={`py-2 px-4 rounded-lg text-sm font-medium transition ${
+          onClick={() =>
+            setForm({ ...form, type: "income", categoryId: "", cardId: "" })
+          }
+          className={`py-2 px-4 rounded-xl text-sm font-semibold transition ${
             form.type === "income"
-              ? "bg-emerald-500 text-white"
-              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              ? "bg-emerald-600 text-white"
+              : "bg-card-background text-text-secondary hover:bg-border-color"
           }`}
         >
           Income
@@ -98,6 +105,21 @@ const TransactionForm = ({ initial, categories, onSaved, onCancel }) => {
           </option>
         ))}
       </Select>
+
+      {filteredCards.length > 0 && (
+        <Select
+          label="Card (optional)"
+          value={form.cardId}
+          onChange={(e) => setForm({ ...form, cardId: e.target.value })}
+        >
+          <option value="">No card</option>
+          {filteredCards.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name} {c.last_four ? `•${c.last_four}` : ""}
+            </option>
+          ))}
+        </Select>
+      )}
 
       <Input
         label="Description"

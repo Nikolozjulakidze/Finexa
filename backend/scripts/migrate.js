@@ -9,8 +9,13 @@ const __dirname = path.dirname(__filename);
 
 const DROP_ALL = `
     DROP TABLE IF EXISTS ai_insights CASCADE;
+    DROP TABLE IF EXISTS bank_transactions CASCADE;
+    DROP TABLE IF EXISTS bank_accounts CASCADE;
+    DROP TABLE IF EXISTS bank_connections CASCADE;
     DROP TABLE IF EXISTS budgets CASCADE;
     DROP TABLE IF EXISTS transactions CASCADE;
+    DROP TABLE IF EXISTS accounts CASCADE;
+    DROP TABLE IF EXISTS cards CASCADE;
     DROP TABLE IF EXISTS categories CASCADE;
     DROP TABLE IF EXISTS users CASCADE;
 `;
@@ -30,6 +35,9 @@ const runMigration = async () => {
 
     console.log("Running migration...");
     await pool.query(schema);
+    await pool.query(
+      "ALTER TABLE bank_transactions ADD COLUMN IF NOT EXISTS type VARCHAR(10);",
+    );
 
     console.log("Migration complete. Tables created.");
   } catch (error) {

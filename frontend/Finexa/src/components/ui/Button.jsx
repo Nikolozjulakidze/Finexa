@@ -1,11 +1,14 @@
 const variants = {
   primary:
-    "bg-linear-to-b from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 text-white shadow-md shadow-violet-500/25",
-  secondary: "bg-slate-100 hover:bg-slate-200 text-slate-900",
-  ghost: "hover:bg-slate-100 text-slate-700",
+    "bg-accent text-white shadow-soft hover:shadow-md transition transform hover:-translate-y-0.5",
+  secondary: "bg-surface-alt hover:bg-border-hover text-text-primary",
+  ghost: "hover:bg-surface-alt text-text-secondary hover:text-text-primary",
   danger:
     "bg-linear-to-b from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-md shadow-rose-500/25",
-  outline: "border border-slate-200 hover:bg-slate-50 text-slate-700",
+  outline:
+    "border border-border-color hover:bg-surface-alt text-text-secondary hover:text-text-primary",
+  accent:
+    "bg-accent text-white shadow-soft hover:shadow-md transition transform hover:-translate-y-0.5",
 };
 
 const sizes = {

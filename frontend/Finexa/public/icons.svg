@@ -1,0 +1,10 @@
+<svg width="192" height="192" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="finexaAppIconGradient" x1="0" y1="0" x2="0" y2="1" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#0F3D91"/>
+      <stop offset="50%" stopColor="#1D6CF2"/>
+      <stop offset="100%" stopColor="#27D7F8"/>
+    </linearGradient>
+  </defs>
+  <path d="M 14 38 L 24 10 L 36 38 Z M 18 26 L 30 26 L 33 14 L 31 12 L 35 12 L 33 14 Z" fill="url(#finexaAppIconGradient)"/>
+</svg>

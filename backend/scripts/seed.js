@@ -17,7 +17,37 @@ const BUDGETS = [
   { name: "Shopping", amount: 150 },
 ];
 
-const generateTransactions = (catMap) => {
+const CARDS = [
+  {
+    name: "Personal Visa",
+    type: "debit",
+    bank: "Bank of Georgia",
+    brand: "Visa",
+    lastFour: "4242",
+    color: "#6366F1",
+    isDefault: true,
+  },
+  {
+    name: "Work Card",
+    type: "credit",
+    bank: "TBC Bank",
+    brand: "Mastercard",
+    lastFour: "8765",
+    color: "#10B981",
+    isDefault: false,
+  },
+  {
+    name: "Travel Card",
+    type: "credit",
+    bank: "Liberty Bank",
+    brand: "Visa",
+    lastFour: "1234",
+    color: "#F59E0B",
+    isDefault: false,
+  },
+];
+
+const generateTransactions = (catMap, cardMap) => {
   const txns = [];
   const today = new Date();
 
@@ -30,6 +60,10 @@ const generateTransactions = (catMap) => {
   const rangeFloat = (min, max) => min + rng() * (max - min);
   const rangeInt = (min, max) => Math.floor(rangeFloat(min, max + 1));
   const pick = (arr) => arr[Math.floor(rng() * arr.length)];
+
+  // Card IDs for linking transactions
+  const cardIds = Object.values(cardMap);
+  const expenseCardIds = cardIds; // all cards can be used for expenses
 
   for (let monthsAgo = 11; monthsAgo >= 0; monthsAgo--) {
     const monthStart = new Date(
@@ -50,7 +84,14 @@ const generateTransactions = (catMap) => {
       return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     };
 
-    const add = (day, categoryName, amount, type, description) => {
+    const add = (
+      day,
+      categoryName,
+      amount,
+      type,
+      description,
+      cardId = null,
+    ) => {
       if (day < 1 || day > monthLastDay) return;
       const catId = catMap[categoryName];
       if (!catId) return;
@@ -60,6 +101,7 @@ const generateTransactions = (catMap) => {
         type,
         description,
         date: dateOn(day),
+        cardId,
       });
     };
 
@@ -95,6 +137,7 @@ const generateTransactions = (catMap) => {
       rangeFloat(75, 110),
       "expense",
       "Electricity",
+      pick(expenseCardIds),
     );
     add(
       rangeInt(10, 14),
@@ -102,12 +145,20 @@ const generateTransactions = (catMap) => {
       rangeFloat(45, 70),
       "expense",
       "Internet",
+      pick(expenseCardIds),
     );
 
     // Subscriptions
-    add(3, "Entertainment", 15.99, "expense", "Netflix");
-    add(5, "Entertainment", 10.99, "expense", "Spotify");
-    add(7, "Entertainment", 9.99, "expense", "YouTube Premium");
+    add(3, "Entertainment", 15.99, "expense", "Netflix", pick(expenseCardIds));
+    add(5, "Entertainment", 10.99, "expense", "Spotify", pick(expenseCardIds));
+    add(
+      7,
+      "Entertainment",
+      9.99,
+      "expense",
+      "YouTube Premium",
+      pick(expenseCardIds),
+    );
 
     // Daily granular transactions
     for (let day = 1; day <= monthLastDay; day++) {
@@ -122,6 +173,7 @@ const generateTransactions = (catMap) => {
           rangeFloat(4, 8),
           "expense",
           pick(["Morning coffee", "Coffee", "Latte"]),
+          pick(expenseCardIds),
         );
       }
 
@@ -132,6 +184,7 @@ const generateTransactions = (catMap) => {
           rangeFloat(10, 18),
           "expense",
           pick(["Lunch", "Salad bowl", "Sandwich"]),
+          pick(expenseCardIds),
         );
       }
 
@@ -142,6 +195,7 @@ const generateTransactions = (catMap) => {
           rangeFloat(28, 75),
           "expense",
           pick(["Dinner out", "Restaurant", "Brunch"]),
+          pick(expenseCardIds),
         );
       }
 
@@ -152,11 +206,19 @@ const generateTransactions = (catMap) => {
           rangeFloat(2.5, 6),
           "expense",
           pick(["Subway", "Parking"]),
+          pick(expenseCardIds),
         );
       }
 
       if (rng() < 0.15) {
-        add(day, "Shopping", rangeFloat(12, 48), "expense", "Amazon order");
+        add(
+          day,
+          "Shopping",
+          rangeFloat(12, 48),
+          "expense",
+          "Amazon order",
+          pick(expenseCardIds),
+        );
       }
     }
 
@@ -170,13 +232,21 @@ const generateTransactions = (catMap) => {
           rangeFloat(55, 120),
           "expense",
           pick(["Whole Foods", "Trader Joe's", "Weekly groceries"]),
+          pick(expenseCardIds),
         );
       }
     }
 
     // Weekly gas
     for (let day = 4; day <= monthLastDay; day += 7) {
-      add(day, "Transportation", rangeFloat(35, 60), "expense", "Gas");
+      add(
+        day,
+        "Transportation",
+        rangeFloat(35, 60),
+        "expense",
+        "Gas",
+        pick(expenseCardIds),
+      );
     }
 
     // Occasional larger expenses
@@ -187,6 +257,7 @@ const generateTransactions = (catMap) => {
         rangeFloat(55, 180),
         "expense",
         pick(["Clothes", "New shoes"]),
+        pick(expenseCardIds),
       );
     }
 
@@ -197,6 +268,7 @@ const generateTransactions = (catMap) => {
         rangeFloat(40, 130),
         "expense",
         "Doctor visit",
+        pick(expenseCardIds),
       );
     }
 
@@ -207,6 +279,7 @@ const generateTransactions = (catMap) => {
         rangeFloat(35, 55),
         "expense",
         "Haircut",
+        pick(expenseCardIds),
       );
     }
 
@@ -217,6 +290,7 @@ const generateTransactions = (catMap) => {
         rangeFloat(180, 380),
         "expense",
         "Weekend trip",
+        pick(expenseCardIds),
       );
     }
   }
@@ -271,7 +345,28 @@ const seed = async () => {
       catMap[c.name] = c.id;
     });
 
-    const transactions = generateTransactions(catMap);
+    console.log(`Seeding ${CARDS.length} cards...`);
+    const cardMap = {};
+    for (const card of CARDS) {
+      const cardRes = await client.query(
+        `INSERT INTO cards (user_id, name, type, bank, brand, last_four, color, is_default)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                 RETURNING id`,
+        [
+          userId,
+          card.name,
+          card.type,
+          card.bank,
+          card.brand,
+          card.lastFour,
+          card.color,
+          card.isDefault,
+        ],
+      );
+      cardMap[card.name] = cardRes.rows[0].id;
+    }
+
+    const transactions = generateTransactions(catMap, cardMap);
     console.log(
       `Inserting ${transactions.length} transactions across 12 months...`,
     );
@@ -279,13 +374,14 @@ const seed = async () => {
     const placeholders = [];
     const params = [];
     transactions.forEach((t, i) => {
-      const base = i * 6;
+      const base = i * 7;
       placeholders.push(
-        `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6})`,
+        `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5}, $${base + 6}, $${base + 7})`,
       );
       params.push(
         userId,
         t.categoryId,
+        t.cardId,
         t.amount,
         t.type,
         t.description,
@@ -295,7 +391,7 @@ const seed = async () => {
 
     if (placeholders.length > 0) {
       await client.query(
-        `INSERT INTO transactions (user_id, category_id, amount, type, description, transaction_date)
+        `INSERT INTO transactions (user_id, category_id, card_id, amount, type, description, transaction_date)
                  VALUES ${placeholders.join(", ")}`,
         params,
       );
@@ -318,7 +414,7 @@ const seed = async () => {
     console.log("");
     console.log("Demo data seeded successfully!");
     console.log("");
-    console.log(" Email:nikolozijulakidze@gmail.com");
+    console.log(" Email: nikolozijulakidze@gmail.com");
     console.log(" Password: Test@1234");
     console.log("");
   } catch (error) {

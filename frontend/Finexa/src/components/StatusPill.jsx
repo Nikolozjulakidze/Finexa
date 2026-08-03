@@ -1,10 +1,10 @@
 const styles = {
-  income: "bg-emerald-50 text-emerald-700",
-  expense: "bg-rose-50 text-rose-700",
-  warning: "bg-amber-50 text-amber-700",
-  info: "bg-blue-50 text-blue-700",
-  critical: "bg-red-50 text-red-700",
-  neutral: "bg-slate-100 text-slate-700",
+  income: "bg-income/10 text-income",
+  expense: "bg-expense/10 text-expense",
+  warning: "bg-warning/10 text-warning",
+  info: "bg-blue-500/10 text-blue-500",
+  critical: "bg-rose-500/10 text-rose-500",
+  neutral: "bg-surface-alt text-text-secondary",
 };
 
 const StatusPill = ({ variant = "neutral", children }) => {

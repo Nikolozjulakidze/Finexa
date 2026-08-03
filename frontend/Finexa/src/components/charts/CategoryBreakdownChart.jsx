@@ -1,19 +1,20 @@
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { formatCurrency } from "../../utils/format.js";
+import CustomTooltip from "./CustomTooltip.jsx";
 
 const GRADIENTS = [
-  { id: "cat-violet", from: "#A78BFA", to: "#7C3AED", solid: "#7C3AED" },
-  { id: "cat-orange", from: "#FB923C", to: "#EA580C", solid: "#EA580C" },
   { id: "cat-blue", from: "#60A5FA", to: "#2563EB", solid: "#2563EB" },
-  { id: "cat-emerald", from: "#34D399", to: "#059669", solid: "#059669" },
-  { id: "cat-rose", from: "#FB7185", to: "#E11D48", solid: "#E11D48" },
-  { id: "cat-amber", from: "#FBBF24", to: "#D97706", solid: "#D97706" },
+  { id: "cat-emerald", from: "#34D399", to: "#10B981", solid: "#10B981" },
+  { id: "cat-amber", from: "#FBBF24", to: "#F59E0B", solid: "#F59E0B" },
+  { id: "cat-rose", from: "#FB7185", to: "#EF4444", solid: "#EF4444" },
+  { id: "cat-indigo", from: "#A78BFA", to: "#7C3AED", solid: "#7C3AED" },
+  { id: "cat-cyan", from: "#06B6D4", to: "#08B48F", solid: "#08B48F" },
 ];
 
 const CategoryBreakdownChart = ({ data, currency }) => {
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 text-sm text-slate-400">
+      <div className="flex items-center justify-center h-64 text-sm text-text-secondary">
         No expenses yet
       </div>
     );
@@ -63,12 +64,7 @@ const CategoryBreakdownChart = ({ data, currency }) => {
               ))}
             </Pie>
             <Tooltip
-              contentStyle={{
-                borderRadius: 12,
-                border: "none",
-                boxShadow: "0 4px 12px rgba(107, 114, 128, 0.15)",
-                fontSize: 12,
-              }}
+              content={<CustomTooltip currency={currency} />}
               formatter={(v) => formatCurrency(v, currency)}
             />
           </PieChart>
@@ -85,9 +81,11 @@ const CategoryBreakdownChart = ({ data, currency }) => {
                 className="h-2 w-2 rounded-full shrink-0"
                 style={{ backgroundColor: c.solid }}
               />
-              <span className="text-xs text-slate-700 truncate">{c.name}</span>
+              <span className="text-xs text-text-secondary truncate">
+                {c.name}
+              </span>
             </div>
-            <span className="text-xs font-medium text-slate-900 shrink-0 ml-2">
+            <span className="text-xs font-medium text-text-primary shrink-0 ml-2">
               {formatCurrency(c.value, currency)}
             </span>
           </div>

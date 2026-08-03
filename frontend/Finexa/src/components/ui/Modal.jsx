@@ -5,6 +5,7 @@ const sizeClasses = {
   sm: "max-w-md",
   md: "max-w-lg",
   lg: "max-w-2xl",
+  xl: "max-w-4xl",
 };
 
 const Modal = ({ open, onClose, title, children, size = "md" }) => {
@@ -27,22 +28,22 @@ const Modal = ({ open, onClose, title, children, size = "md" }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
       <div
-        className={`relative bg-white rounded-2xl shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col`}
+        className={`relative bg-surface rounded-2xl shadow-strong w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col animate-fadeIn`}
       >
-        <div className="flex items-center justify-between p-5 border-b border-slate-100 shrink-0">
-          <h2 className="font-semibold text-slate-900">{title}</h2>
+        <div className="flex items-center justify-between p-5 border-b border-border-color shrink-0">
+          <h2 className="font-semibold text-text-primary text-lg">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-slate-100 rounded-md text-slate-500 transition"
+            className="p-2 hover:bg-surface-alt rounded-lg text-text-secondary transition"
           >
             <X size={18} />
           </button>
         </div>
-        <div className="p-5 overflow-y-auto">{children}</div>
+        <div className="p-6 overflow-y-auto">{children}</div>
       </div>
     </div>
   );

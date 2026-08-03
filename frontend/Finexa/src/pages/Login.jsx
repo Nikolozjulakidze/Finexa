@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Wallet, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import AuthHero from "../components/AuthHero.jsx";
 import Spinner from "../components/Spinner.jsx";
+import FinexaLogo from "../components/FinexaLogo.jsx";
 
 const Login = () => {
   const { login } = useAuth();
@@ -19,7 +20,7 @@ const Login = () => {
     try {
       await login(form.email, form.password);
       toast.success("Welcome back!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     } finally {
@@ -28,25 +29,25 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-background text-text-primary">
       <div className="flex-1 flex flex-col px-6 sm:px-10 lg:px-14 py-8 order-1">
         <div className="flex justify-start items-center gap-2">
-          <div className="h-9 w-9 rounded-xl bg-linear-to-br from-violet-400 to-violet-600 flex items-center justify-center">
-            <Wallet size={18} className="text-white" />
-          </div>
-          <span className="font-bold text-xl text-slate-900">Finexa</span>
+          <FinexaLogo size={122} variant="icon" />
+          <span className="font-bold text-xl text-text-primary">Finexa</span>
         </div>
 
         <div className="flex-1 flex items-center justify-center py-10">
           <div className="w-full max-w-md">
-            <h2 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">
+            <h2 className="text-4xl font-bold text-text-primary tracking-tight mb-2">
               Sign In
             </h2>
-            <p className="text-slate-500 mb-10">Please login to continue</p>
+            <p className="text-text-secondary mb-10">
+              Please login to continue
+            </p>
 
             <form onSubmit={onSubmit} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm font-semibold text-text-primary">
                   Email
                 </label>
                 <input
@@ -54,13 +55,13 @@ const Login = () => {
                   required
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full bg-slate-100/80 hover:bg-slate-100 focus:bg-white border-2 border-transparent focus:border-violet-500 rounded-2xl px-5 py-4 text-slate-900 text-sm focus:outline-none transition"
+                  className="input-field w-full rounded-2xl px-5 py-4 text-sm placeholder-text-tertiary focus-ring-accent"
                   placeholder="you@example.com"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm font-semibold text-text-primary">
                   Password
                 </label>
                 <div className="relative">
@@ -71,13 +72,13 @@ const Login = () => {
                     onChange={(e) =>
                       setForm({ ...form, password: e.target.value })
                     }
-                    className="w-full bg-slate-100/80 hover:bg-slate-100 focus:bg-white border-2 border-transparent focus:border-violet-500 rounded-2xl px-5 py-4 pr-12 text-slate-900 text-sm focus:outline-none transition"
+                    className="input-field w-full rounded-2xl px-5 py-4 pr-12 text-sm placeholder-text-tertiary focus-ring-accent"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -88,7 +89,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-2 bg-linear-to-br from-violet-400 to-violet-600  active:bg-violet-800 text-white font-semibold py-4 rounded-2xl transition shadow-lg shadow-violet-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold py-4 rounded-2xl transition shadow-lg shadow-violet-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -101,11 +102,11 @@ const Login = () => {
               </button>
             </form>
 
-            <p className="text-center mt-8 text-sm text-slate-500">
+            <p className="text-center mt-8 text-sm text-text-secondary">
               No Account Yet?{" "}
               <Link
                 to="/register"
-                className="text-violet-600 font-semibold hover:text-violet-700 transition"
+                className="font-semibold text-accent hover:text-accent-hover transition"
               >
                 Get Yours Now
               </Link>
@@ -113,14 +114,16 @@ const Login = () => {
           </div>
         </div>
 
-        <div className="flex justify-start gap-6 text-xs text-slate-500">
-          <a className="hover:text-slate-900 transition cursor-pointer">
+        <div className="flex justify-start gap-6 text-xs text-text-secondary">
+          <a className="hover:text-text-primary transition cursor-pointer">
             Privacy Policy
           </a>
-          <a className="hover:text-slate-900 transition cursor-pointer">
+          <a className="hover:text-text-primary transition cursor-pointer">
             Terms
           </a>
-          <a className="hover:text-slate-900 transition cursor-pointer">FAQ</a>
+          <a className="hover:text-text-primary transition cursor-pointer">
+            FAQ
+          </a>
         </div>
       </div>
 
