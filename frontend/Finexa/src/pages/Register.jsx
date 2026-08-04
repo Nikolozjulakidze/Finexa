@@ -48,9 +48,7 @@ const Register = () => {
       <div className="flex-1 flex flex-col px-6 sm:px-10 lg:px-14 py-8 order-1">
         <div className="flex justify-start items-center gap-2">
           <FinexaLogo size={192} variant="icon" />
-          <span className="font-bold text-xl text-text-primary">
-            Finexa
-          </span>
+          <span className="font-bold text-xl text-text-primary">Nexus</span>
         </div>
 
         <div className="flex-1 flex items-center justify-center py-10">
@@ -177,7 +175,9 @@ const Register = () => {
           <a className="hover:text-text-primary transition cursor-pointer">
             Terms
           </a>
-          <a className="hover:text-text-primary transition cursor-pointer">FAQ</a>
+          <a className="hover:text-text-primary transition cursor-pointer">
+            FAQ
+          </a>
         </div>
       </div>
 

@@ -1,8 +1,8 @@
 {
-  "name": "finexa-backend",
+  "name": "Nexus-backend",
   "version": "1.0.0",
   "main": "server.js",
-  "description": "PERN PROJECT FINEXA",
+  "description": "PERN PROJECT Nexus",
   "type": "module",
   "scripts": {
     "start": "node server.js",

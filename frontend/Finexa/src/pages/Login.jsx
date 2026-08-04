@@ -33,7 +33,7 @@ const Login = () => {
       <div className="flex-1 flex flex-col px-6 sm:px-10 lg:px-14 py-8 order-1">
         <div className="flex justify-start items-center gap-2">
           <FinexaLogo size={122} variant="icon" />
-          <span className="font-bold text-xl text-text-primary">Finexa</span>
+          <span className="font-bold text-xl text-text-primary">Nexus</span>
         </div>
 
         <div className="flex-1 flex items-center justify-center py-10">

@@ -35,7 +35,7 @@ const Sidebar = () => {
           <FinexaLogo size={76} variant="icon" />
         </div>
         <div>
-          <div className="text-lg font-extrabold text-text-primary">Finexa</div>
+          <div className="text-lg font-extrabold text-text-primary">Nexus</div>
           <div className="text-xs text-text-secondary">Personal Finance</div>
         </div>
       </div>

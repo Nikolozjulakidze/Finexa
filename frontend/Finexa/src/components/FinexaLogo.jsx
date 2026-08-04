@@ -13,7 +13,7 @@ const FinexaLogo = ({
   size = 48,
   className = "",
   variant = "icon",
-  title = "Finexa",
+  title = "Nexus",
 }) => {
   const logoImg = (
     <img
@@ -36,7 +36,7 @@ const FinexaLogo = ({
         letterSpacing: "-0.02em",
       }}
     >
-      Finexa
+      Nexus
     </span>
   );
 

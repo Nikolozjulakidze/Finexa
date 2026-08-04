@@ -1,1 +1,1 @@
-# Finexa---AI-Powered-Personal-Finance-Tracker
+# Nexus---AI-Powered-Personal-Finance-Tracker
