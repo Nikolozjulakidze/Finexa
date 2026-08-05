@@ -1,9 +1,15 @@
-import { chatRaw } from "../utils/gemini.js";
+import {
+  chatRaw,
+  chatRawWithImage,
+  transcribeAudio,
+  textToSpeech,
+} from "../utils/gemini.js";
 import pool from "../db.js";
 
 export const chat = async (req, res) => {
-  const { prompt, includeContext = false } = req.body;
-  if (!prompt) return res.status(400).json({ message: "prompt is required" });
+  const { prompt, includeContext = false, image } = req.body;
+  if (!prompt && !image)
+    return res.status(400).json({ message: "prompt or image is required" });
 
   if (!process.env.GROQ_API_KEY) {
     console.error("AI chat attempted but GROQ_API_KEY is not set");
@@ -54,7 +60,15 @@ export const chat = async (req, res) => {
       finalPrompt = `${context}\n\nUser question:\n${prompt}`;
     }
 
-    const reply = await chatRaw(finalPrompt);
+    let reply;
+    if (image) {
+      reply = await chatRawWithImage(
+        finalPrompt || "Analyze this image and summarize what you see.",
+        image,
+      );
+    } else {
+      reply = await chatRaw(finalPrompt);
+    }
     res.json({ reply });
   } catch (error) {
     console.error("AI chat error", error);
@@ -63,6 +77,54 @@ export const chat = async (req, res) => {
 };
 
 export default { chat };
+
+export const transcribe = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "audio file is required" });
+    }
+
+    if (!process.env.GROQ_API_KEY) {
+      return res.status(503).json({
+        message: "AI service unavailable",
+        details: "Server is missing GROQ_API_KEY environment variable",
+      });
+    }
+
+    const mimeType = req.file.mimetype || "audio/webm";
+    const text = await transcribeAudio(req.file.buffer, mimeType);
+    res.json({ text });
+  } catch (error) {
+    console.error("Transcribe error", error);
+    res
+      .status(500)
+      .json({ message: "Transcription failed", details: error.message });
+  }
+};
+
+export const tts = async (req, res) => {
+  const { text, voice } = req.body;
+
+  if (!text || !text.trim()) {
+    return res.status(400).json({ message: "text is required" });
+  }
+
+  try {
+    const audioBuffer = await textToSpeech(text, voice);
+    res.set({
+      "Content-Type": "audio/mpeg",
+      "Content-Length": audioBuffer.length,
+      "Cache-Control": "no-store",
+    });
+    res.send(audioBuffer);
+  } catch (error) {
+    console.error("TTS error", error);
+    const status = error?.message?.includes("not set") ? 503 : 500;
+    res
+      .status(status)
+      .json({ message: "Text-to-speech failed", details: error.message });
+  }
+};
 
 export const getContext = async (req, res) => {
   try {

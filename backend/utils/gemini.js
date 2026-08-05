@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 
 dotenv.config();
 
@@ -13,6 +14,31 @@ if (!process.env.GROQ_API_KEY) {
     "⚠️ WARNING: GROQ_API_KEY is not set. AI features will not work.",
   );
 }
+
+// Gemini client for vision tasks. Groq decommissioned all vision-capable
+// models, so image analysis is routed through Google's Gemini API instead.
+const gemini = process.env.GEMINI_API_KEY
+  ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+  : null;
+
+if (!process.env.GEMINI_API_KEY) {
+  console.error(
+    "⚠️ WARNING: GEMINI_API_KEY is not set. Image analysis will not work.",
+  );
+}
+
+// Vision-capable Gemini models. gemini-flash-latest is tried first because
+// gemini-2.0-flash is frequently quota-blocked on free-tier accounts. If one
+// hits a quota limit, the next model is attempted automatically.
+const GEMINI_VISION_MODELS = ["gemini-flash-latest", "gemini-2.0-flash"];
+
+// Gemini TTS model. This is Gemini's neural text-to-speech model that produces
+// natural, human-sounding speech (much better than the browser's robotic Web
+// Speech API voices). Runs on the free tier using the existing GEMINI_API_KEY.
+const GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts";
+// Default voice name. Change to any of the available Gemini voices:
+// Aoede, Charon, Fenrir, Kore, Puck, Zephyr.
+const GEMINI_TTS_VOICE = "Aoede";
 
 const MODEL = "llama-3.3-70b-versatile";
 
@@ -45,6 +71,156 @@ const askAI = async (prompt) => {
 
 export const chatRaw = async (prompt) => {
   return askAI(prompt);
+};
+
+/**
+ * Send a prompt along with an image to a vision-capable model.
+ *
+ * Groq decommissioned all vision-capable models (e.g. llama-3.2-90b-vision-preview),
+ * so image analysis is routed through Google's Gemini vision model.
+ *
+ * @param {string} prompt - The user's text prompt.
+ * @param {string} imageDataUrl - Base64 data URL of the image (e.g. data:image/png;base64,...).
+ */
+export const chatRawWithImage = async (prompt, imageDataUrl) => {
+  if (!gemini) {
+    throw new Error(
+      "Image analysis is unavailable: GEMINI_API_KEY is not set on the server.",
+    );
+  }
+
+  // The data URL looks like "data:image/png;base64,....". Gemini expects
+  // the mime type and the raw base64 payload separately.
+  const match = imageDataUrl.match(
+    /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/,
+  );
+
+  let lastError = null;
+
+  for (const model of GEMINI_VISION_MODELS) {
+    try {
+      let response;
+      if (match) {
+        const [, mimeType, base64Data] = match;
+        response = await gemini.models.generateContent({
+          model,
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: prompt },
+                { inlineData: { mimeType, data: base64Data } },
+              ],
+            },
+          ],
+        });
+      } else {
+        response = await gemini.models.generateContent({
+          model,
+          contents: prompt,
+        });
+      }
+
+      const text = response.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (text) return stripMarkdown(text);
+    } catch (error) {
+      lastError = error;
+      // Only try the next model on quota/resource-exhausted errors.
+      const isQuota =
+        error?.status === 429 ||
+        /quota|rate.?limit|resource.?exhausted/i.test(error?.message || "");
+      if (!isQuota) {
+        throw error;
+      }
+    }
+  }
+
+  // All models were quota-blocked.
+  if (lastError) {
+    const friendly = new Error(
+      "Image analysis is temporarily rate-limited. Please try again in a moment.",
+    );
+    friendly.status = 429;
+    throw friendly;
+  }
+
+  return "";
+};
+
+/**
+ * Convert text to natural-sounding speech using Gemini's neural TTS model.
+ *
+ * This produces human-quality audio (compared to the browser's robotic Web
+ * Speech API voices). Runs on the free tier using the existing GEMINI_API_KEY.
+ * Returns the raw MP3 audio bytes.
+ *
+ * @param {string} text - The text to speak.
+ * @param {string} [voice] - Optional Gemini voice name (default Aoede).
+ * @returns {Promise<Buffer>} MP3 audio buffer.
+ */
+export const textToSpeech = async (text, voice = GEMINI_TTS_VOICE) => {
+  if (!gemini) {
+    throw new Error(
+      "Text-to-speech is unavailable: GEMINI_API_KEY is not set on the server.",
+    );
+  }
+
+  if (!text || !text.trim()) {
+    throw new Error("Text to speak is required.");
+  }
+
+  const response = await gemini.models.generateContent({
+    model: GEMINI_TTS_MODEL,
+    contents: [{ role: "user", parts: [{ text }] }],
+    config: {
+      responseModalities: ["AUDIO"],
+      speechConfig: {
+        voiceConfig: {
+          prebuiltVoiceConfig: {
+            voiceName: voice,
+          },
+        },
+      },
+    },
+  });
+
+  const parts = response.candidates?.[0]?.content?.parts || [];
+  for (const part of parts) {
+    if (part.inlineData?.data) {
+      // Decode the base64 audio payload into a Buffer.
+      return Buffer.from(part.inlineData.data, "base64");
+    }
+  }
+
+  throw new Error("No audio was returned from the TTS model.");
+};
+
+/**
+ * Transcribe an audio buffer using Groq's Whisper endpoint
+ * (OpenAI-compatible API). Returns the recognized text.
+ * @param {Buffer} audioBuffer - Raw audio bytes (e.g. webm/opus from MediaRecorder)
+ * @param {string} mimeType - audio MIME type, e.g. "audio/webm"
+ */
+export const transcribeAudio = async (audioBuffer, mimeType = "audio/webm") => {
+  const extension = mimeType.includes("mp4")
+    ? "m4a"
+    : mimeType.includes("ogg")
+      ? "ogg"
+      : mimeType.includes("wav")
+        ? "wav"
+        : "webm";
+
+  const file = new File([audioBuffer], `recording.${extension}`, {
+    type: mimeType,
+  });
+
+  const response = await ai.audio.transcriptions.create({
+    model: "whisper-large-v3",
+    file,
+    language: "en",
+  });
+
+  return response.text;
 };
 
 export const generateMonthlyInsight = async ({

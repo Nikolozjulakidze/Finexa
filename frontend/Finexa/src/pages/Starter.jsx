@@ -49,7 +49,7 @@ const SectionSub = ({ children }) => (
 );
 
 /* ---------- Animated counter ---------- */
-const useCountUp = (target, duration = 2000, delay = 0) => {
+const useCountUp = (target, duration = 3000, delay = 0) => {
   const [value, setValue] = useState(0);
   const ref = useRef(null);
 
@@ -59,7 +59,7 @@ const useCountUp = (target, duration = 2000, delay = 0) => {
       val: target,
       duration: duration / 1000,
       delay: delay / 1000,
-      ease: "power2.out",
+      ease: "power1.inOut",
       onUpdate: () => setValue(Math.round(obj.val)),
     });
     return () => tween.kill();
@@ -69,7 +69,7 @@ const useCountUp = (target, duration = 2000, delay = 0) => {
 };
 
 const Stat = ({ value, suffix, prefix, label, decimals = 0, delay = 0 }) => {
-  const { ref, value: current } = useCountUp(value, 2000, delay);
+  const { ref, value: current } = useCountUp(value, 3000, delay);
   return (
     <div ref={ref} className="text-center">
       <div className="stat-number text-4xl md:text-5xl font-bold text-text-primary">
@@ -631,26 +631,26 @@ const Hero = () => {
 
         {/* Stats — count up on load, visible without scrolling */}
         <div className="hero-stats mt-14 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <Stat value={50} suffix="k+" label="Active users" delay={0} />
+          <Stat value={50} suffix="k+" label="Active users" delay={1200} />
           <Stat
             value={120}
             suffix="k+"
             label="Transactions tracked"
-            delay={200}
+            delay={1400}
           />
           <Stat
             value={99.9}
             suffix="%"
             decimals={1}
             label="Uptime guarantee"
-            delay={400}
+            delay={1600}
           />
           <Stat
             value={4.9}
             suffix="/5"
             decimals={1}
             label="Average rating"
-            delay={600}
+            delay={1800}
           />
         </div>
 
@@ -853,62 +853,297 @@ const HowItWorks = () => (
 );
 
 /* ---------- Showcase ---------- */
-const Showcase = () => (
-  <section className="py-24 md:py-32">
-    <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-      <div className="animated-section">
-        <SectionBadge icon={<BarChart3 size={16} />}>Insights</SectionBadge>
-        <SectionHeading>Understand Your Money at a Glance</SectionHeading>
-        <p className="text-text-secondary text-lg mb-6">
-          Powerful visualizations turn raw data into actionable insights. Track
-          trends, spot opportunities, and make confident decisions.
-        </p>
-        <ul className="space-y-4">
-          {[
-            "Interactive spending breakdowns by category",
-            "Monthly income vs. expense trends",
-            "Personalized savings recommendations",
-            "Real-time portfolio & investment tracking",
-          ].map((item) => (
-            <li key={item} className="flex items-start gap-3 text-text-primary">
-              <span className="mt-1 h-5 w-5 rounded-full bg-accent-bg text-accent flex items-center justify-center shrink-0">
-                <Check size={12} />
+const Showcase = () => {
+  const showcaseRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate bar chart growing from bottom on scroll
+      gsap.fromTo(
+        ".showcase-bar",
+        { height: "0%" },
+        {
+          height: (i) =>
+            `${[45, 60, 38, 72, 55, 80, 64, 90, 74, 100, 88, 68][i]}%`,
+          duration: 1.2,
+          ease: "power3.out",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: ".showcase-card",
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+      // Count up the net figure
+      gsap.fromTo(
+        ".showcase-net",
+        { innerText: 0 },
+        {
+          innerText: 3936,
+          snap: { innerText: 1 },
+          duration: 1.6,
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: ".showcase-card",
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+      // Animate donut stroke
+      gsap.fromTo(
+        ".showcase-donut-ring",
+        { strokeDashoffset: 88 },
+        {
+          strokeDashoffset: 53,
+          duration: 1.4,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".showcase-card",
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+      // Floating chips
+      gsap.fromTo(
+        ".showcase-chip",
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.2,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".showcase-card",
+            start: "top 75%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+    }, showcaseRef);
+    return () => ctx.revert();
+  }, []);
+
+  const bars = [45, 60, 38, 72, 55, 80, 64, 90, 74, 100, 88, 68];
+  const labels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  return (
+    <section
+      ref={showcaseRef}
+      className="py-24 md:py-32 relative overflow-hidden"
+    >
+      <div className="aurora-blob h-80 w-80 bg-accent/15 top-1/4 -left-20" />
+      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="animated-section">
+          <SectionBadge icon={<BarChart3 size={16} />}>Insights</SectionBadge>
+          <SectionHeading>Understand Your Money at a Glance</SectionHeading>
+          <p className="text-text-secondary text-lg mb-6">
+            Powerful visualizations turn raw data into actionable insights.
+            Track trends, spot opportunities, and make confident decisions.
+          </p>
+          <ul className="space-y-4">
+            {[
+              "Interactive spending breakdowns by category",
+              "Monthly income vs. expense trends",
+              "Personalized savings recommendations",
+              "Real-time portfolio & investment tracking",
+            ].map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-3 text-text-primary"
+              >
+                <span className="mt-1 h-5 w-5 rounded-full bg-accent-bg text-accent flex items-center justify-center shrink-0">
+                  <Check size={12} />
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <div className="showcase-chip inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border-color shadow-soft">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              <span className="text-sm font-semibold text-text-primary">
+                Income
               </span>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="animated-section">
-        <div className="gradient-border rounded-2xl p-8 shadow-strong">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <div className="text-sm text-text-secondary">
-                Monthly Cash Flow
-              </div>
-              <div className="text-2xl font-bold text-text-primary">
-                +$3,936
-              </div>
+              <span className="text-sm text-text-secondary">$6,300</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-emerald-500/10 text-emerald-500 px-3 py-1.5 rounded-full text-sm font-semibold">
-              <LineChart size={14} /> Healthy
+            <div
+              className="showcase-chip inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border-color shadow-soft"
+              style={{ animationDelay: "-2s" }}
+            >
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+              <span className="text-sm font-semibold text-text-primary">
+                Expenses
+              </span>
+              <span className="text-sm text-text-secondary">$2,400</span>
+            </div>
+            <div
+              className="showcase-chip inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface border border-border-color shadow-soft"
+              style={{ animationDelay: "-4s" }}
+            >
+              <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+              <span className="text-sm font-semibold text-text-primary">
+                Savings
+              </span>
+              <span className="text-sm text-text-accent">+$3,936</span>
             </div>
           </div>
-          <div className="flex items-end gap-2 h-48">
-            {[35, 50, 40, 65, 55, 75, 60, 85, 70, 95, 80, 100].map((h, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1">
+        </div>
+
+        <div className="animated-section">
+          <div className="showcase-card relative gradient-border rounded-2xl p-6 md:p-8 shadow-strong">
+            {/* Floating badge */}
+            <div className="absolute -top-4 right-6 px-4 py-1.5 rounded-full bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-500/30">
+              +12.4% this quarter
+            </div>
+
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <div className="text-sm text-text-secondary">
+                  Net this month
+                </div>
                 <div
-                  className="w-full rounded-t bg-gradient-to-t from-accent/30 to-accent"
-                  style={{ height: `${h}%` }}
-                />
+                  className="showcase-net text-3xl font-bold text-text-primary"
+                  data-target="3936"
+                >
+                  $0
+                </div>
               </div>
-            ))}
+              <div className="flex items-center gap-1.5 bg-emerald-500/10 text-emerald-500 px-3 py-1.5 rounded-full text-sm font-semibold">
+                <LineChart size={14} /> Healthy
+              </div>
+            </div>
+
+            {/* Bar chart */}
+            <div className="flex items-end gap-1.5 sm:gap-2 h-48">
+              {bars.map((h, i) => (
+                <div
+                  key={i}
+                  className="flex-1 flex flex-col items-center gap-1.5"
+                >
+                  <div
+                    className="showcase-bar w-full rounded-t bg-gradient-to-t from-accent/30 to-accent"
+                    style={{ height: "0%" }}
+                  />
+                  <span className="text-[9px] sm:text-[10px] text-text-tertiary font-medium">
+                    {labels[i]}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom row: donut + legend */}
+            <div className="mt-8 grid grid-cols-2 gap-4 items-center border-t border-border-color pt-6">
+              <div>
+                <div className="text-xs font-semibold text-text-primary mb-3">
+                  Top Categories
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { name: "Food & Dining", value: "$320", color: "#3B82F6" },
+                    {
+                      name: "Rent & Housing",
+                      value: "$1,800",
+                      color: "#F59E0B",
+                    },
+                    { name: "Travel", value: "$240", color: "#10B981" },
+                  ].map((c) => (
+                    <div
+                      key={c.name}
+                      className="flex items-center justify-between text-xs"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="h-2 w-2 rounded-full"
+                          style={{ background: c.color }}
+                        />
+                        <span className="text-text-secondary">{c.name}</span>
+                      </div>
+                      <span className="font-semibold text-text-primary">
+                        {c.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="relative h-24 w-24">
+                  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      fill="none"
+                      stroke="var(--border)"
+                      strokeWidth="6"
+                    />
+                    <circle
+                      className="showcase-donut-ring"
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      fill="none"
+                      stroke="#3B82F6"
+                      strokeWidth="6"
+                      strokeDasharray="35 88"
+                      strokeDashoffset="88"
+                      strokeLinecap="round"
+                    />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      fill="none"
+                      stroke="#F59E0B"
+                      strokeWidth="6"
+                      strokeDasharray="22 88"
+                      strokeDashoffset="-37"
+                      strokeLinecap="round"
+                    />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="14"
+                      fill="none"
+                      stroke="#10B981"
+                      strokeWidth="6"
+                      strokeDasharray="16 88"
+                      strokeDashoffset="-61"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-text-primary">
+                    62%
+                  </div>
+                </div>
+                <div className="text-[11px] text-text-secondary mt-2">
+                  Savings rate
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 /* ---------- Testimonials ---------- */
 const testimonials = [
@@ -1034,53 +1269,54 @@ const Pricing = () => (
       </div>
       <div className="grid md:grid-cols-3 gap-8 items-stretch">
         {plans.map((plan, i) => (
-          <div
-            key={i}
-            className={`relative p-8 rounded-2xl flex flex-col animated-section ${
-              plan.popular
-                ? "gradient-border bg-accent-bg shadow-strong"
-                : "bg-surface border border-border-color shadow-soft"
-            }`}
-          >
-            {plan.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent text-white text-xs font-bold">
-                Most Popular
-              </div>
-            )}
-            <h3 className="text-xl font-bold text-text-primary mb-2">
-              {plan.name}
-            </h3>
-            <div className="flex items-baseline gap-1 mb-6">
-              <span className="text-4xl font-bold text-text-primary">
-                {plan.price}
-              </span>
-              {plan.period && (
-                <span className="text-text-secondary">{plan.period}</span>
-              )}
-            </div>
-            <ul className="space-y-3 mb-8 flex-1">
-              {plan.features.map((f) => (
-                <li
-                  key={f}
-                  className="flex items-center gap-3 text-text-primary"
-                >
-                  <span className="h-5 w-5 rounded-full bg-accent-bg text-accent flex items-center justify-center shrink-0">
-                    <Check size={12} />
-                  </span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/register"
-              className={`inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold transition-all duration-300 ${
+          <div key={i} className="animated-section">
+            <div
+              className={`relative h-full p-8 rounded-2xl flex flex-col ${
                 plan.popular
-                  ? "bg-accent text-white hover:bg-accent-hover shadow-lg shadow-accent/30"
-                  : "border border-border-color text-text-primary hover:bg-surface-alt"
+                  ? "gradient-border bg-accent-bg shadow-strong"
+                  : "bg-surface border border-border-color shadow-soft"
               }`}
             >
-              {plan.popular ? "Get Started" : "Choose Plan"}
-            </Link>
+              {plan.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent text-white text-xs font-bold">
+                  Most Popular
+                </div>
+              )}
+              <h3 className="text-xl font-bold text-text-primary mb-2">
+                {plan.name}
+              </h3>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-4xl font-bold text-text-primary">
+                  {plan.price}
+                </span>
+                {plan.period && (
+                  <span className="text-text-secondary">{plan.period}</span>
+                )}
+              </div>
+              <ul className="space-y-3 mb-8 flex-1">
+                {plan.features.map((f) => (
+                  <li
+                    key={f}
+                    className="flex items-center gap-3 text-text-primary"
+                  >
+                    <span className="h-5 w-5 rounded-full bg-accent-bg text-accent flex items-center justify-center shrink-0">
+                      <Check size={12} />
+                    </span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/register"
+                className={`inline-flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold transition-all duration-300 ${
+                  plan.popular
+                    ? "bg-accent text-white hover:bg-accent-hover shadow-lg shadow-accent/30"
+                    : "border border-border-color text-text-primary hover:bg-surface-alt"
+                }`}
+              >
+                {plan.popular ? "Get Started" : "Choose Plan"}
+              </Link>
+            </div>
           </div>
         ))}
       </div>
@@ -1167,24 +1403,26 @@ const Cta = () => (
   <section className="py-24 md:py-32 text-center relative overflow-hidden">
     <div className="absolute inset-0 landing-mesh -z-10" />
     <div className="aurora-blob h-96 w-96 bg-accent/20 top-0 left-1/3" />
-    <div className="container mx-auto px-6 animated-section">
-      <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-text-primary mb-4">
-        Ready to Take Control?
-      </h2>
-      <p className="text-lg text-text-secondary max-w-xl mx-auto mb-10">
-        Join thousands of users who trust Nexus to manage their financial
-        future. Sign up in minutes, free forever.
-      </p>
-      <Link
-        to="/register"
-        className="group inline-flex items-center gap-2 bg-accent text-white font-semibold py-4 px-10 rounded-xl transition-all duration-300 shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 hover:scale-[1.02]"
-      >
-        Get Started for Free
-        <ArrowRight
-          size={18}
-          className="group-hover:translate-x-1 transition-transform"
-        />
-      </Link>
+    <div className="animated-section">
+      <div className="container mx-auto px-6">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-text-primary mb-4">
+          Ready to Take Control?
+        </h2>
+        <p className="text-lg text-text-secondary max-w-xl mx-auto mb-10">
+          Join thousands of users who trust Nexus to manage their financial
+          future. Sign up in minutes, free forever.
+        </p>
+        <Link
+          to="/register"
+          className="group inline-flex items-center gap-2 bg-accent text-white font-semibold py-4 px-10 rounded-xl transition-all duration-300 shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 hover:scale-[1.02]"
+        >
+          Get Started for Free
+          <ArrowRight
+            size={18}
+            className="group-hover:translate-x-1 transition-transform"
+          />
+        </Link>
+      </div>
     </div>
   </section>
 );
