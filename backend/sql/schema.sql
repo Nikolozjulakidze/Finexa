@@ -2,10 +2,22 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255),
+    provider VARCHAR(50),
+    provider_id VARCHAR(255) UNIQUE,
     currency VARCHAR(3) DEFAULT 'USD',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+CREATE TABLE email_otps (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    otp VARCHAR(6) NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_email_otps_email ON email_otps(email);
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
@@ -29,6 +41,9 @@ CREATE TABLE cards (
     last_four VARCHAR(4),
     color VARCHAR(7) DEFAULT '#6366F1',
     is_default BOOLEAN DEFAULT FALSE,
+    provider VARCHAR(50),
+    provider_card_id VARCHAR(255),
+    connection_id INT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -12,6 +12,92 @@ import { encrypt, decrypt } from "../utils/encryption.js";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
+const normalizeLinkedCard = (account, provider) => {
+  // Extract card-like info from a linked bank account. Provider-specific fields.
+  const raw = account || {};
+  const providerCardId =
+    raw.cardId ||
+    raw.card_id ||
+    raw.accountId ||
+    raw.account_id ||
+    raw.id ||
+    raw.iban ||
+    null;
+  const lastFour =
+    raw.maskedPan ||
+    raw.lastFour ||
+    raw.last_four ||
+    raw.cardNumber?.slice?.(-4) ||
+    (typeof raw.maskedPan === "string"
+      ? raw.maskedPan.replace(/\X/g, "").slice(-4)
+      : null) ||
+    null;
+  const brand =
+    raw.brand ||
+    raw.cardScheme ||
+    raw.network ||
+    (typeof raw.cardBrand === "string" ? raw.cardBrand : null) ||
+    null;
+  const name =
+    raw.cardName ||
+    raw.card_name ||
+    raw.name ||
+    raw.displayName ||
+    (provider === "paysera" ? "Paysera Card" : null) ||
+    null;
+  const accountType =
+    raw.type ||
+    raw.accountType ||
+    raw.subtype ||
+    (raw.cardType === "credit" ? "credit" : "debit") ||
+    "debit";
+
+  return { providerCardId, lastFour, brand, name, accountType };
+};
+
+const upsertLinkedCard = async (connection, userId, account) => {
+  const normalized = normalizeLinkedCard(account, connection.provider);
+  if (!normalized.providerCardId) return null;
+
+  const bankName =
+    getProviderConfig(connection.provider)?.name || connection.provider;
+  const cardName = normalized.name || `${bankName} Card`;
+  const lastFour = normalized.lastFour || null;
+  const type = normalized.accountType === "credit" ? "credit" : "debit";
+
+  const result = await pool.query(
+    `INSERT INTO cards (
+       user_id, name, type, bank, brand, last_four, color, is_default,
+       provider, provider_card_id, connection_id
+     ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+     ON CONFLICT (user_id, provider, provider_card_id)
+     DO UPDATE SET
+       name = EXCLUDED.name,
+       type = EXCLUDED.type,
+       bank = EXCLUDED.bank,
+       brand = EXCLUDED.brand,
+       last_four = EXCLUDED.last_four,
+       connection_id = EXCLUDED.connection_id,
+       updated_at = NOW()
+     RETURNING *`,
+    [
+      userId,
+      cardName,
+      type,
+      bankName,
+      brand || "Card",
+      lastFour,
+      "#6366F1",
+      false,
+      connection.provider,
+      normalized.providerCardId,
+      connection.id,
+    ],
+  );
+
+  return result.rows[0];
+};
+
 const getConnectionById = async (connectionId, userId) => {
   const result = await pool.query(
     `SELECT * FROM bank_connections WHERE id = $1 AND user_id = $2`,
@@ -167,7 +253,7 @@ export const handleBankCallback = async (req, res) => {
       ],
     );
 
-    const redirectUrl = `${FRONTEND_URL}/linked-accounts?provider=${provider}&status=linked`;
+    const redirectUrl = `${FRONTEND_URL}/cards?provider=${provider}&status=linked`;
     return res.redirect(redirectUrl);
   } catch (fetchError) {
     console.error("Bank callback error", fetchError);
@@ -267,6 +353,10 @@ export const syncConnection = async (req, res) => {
       ]);
 
       const bankAccountId = accountResult.rows[0].id;
+
+      // Capture card info from the linked account into the cards table
+      await upsertLinkedCard(connection, req.userId, account);
+
       const transactions = await fetchBankTransactions(
         activeConnection.provider,
         accessToken,

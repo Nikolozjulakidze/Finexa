@@ -3,7 +3,8 @@ import pool from "../db.js";
 export const getCards = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, user_id, name, type, bank, brand, last_four, color, is_default, created_at
+      `SELECT id, user_id, name, type, bank, brand, last_four, color, is_default,
+              provider, provider_card_id, connection_id, created_at
        FROM cards
        WHERE user_id = $1
        ORDER BY is_default DESC, created_at DESC`,
@@ -40,9 +41,11 @@ export const createCard = async (req, res) => {
     }
 
     const result = await client.query(
-      `INSERT INTO cards (user_id, name, type, bank, brand, last_four, color, is_default)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-       RETURNING id, user_id, name, type, bank, brand, last_four, color, is_default, created_at`,
+      `INSERT INTO cards (user_id, name, type, bank, brand, last_four, color, is_default,
+                          provider, provider_card_id, connection_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       RETURNING id, user_id, name, type, bank, brand, last_four, color, is_default,
+                 provider, provider_card_id, connection_id, created_at`,
       [
         req.userId,
         name,
@@ -52,6 +55,9 @@ export const createCard = async (req, res) => {
         lastFour || null,
         color || "#6366F1",
         isDefault || false,
+        req.body.provider || null,
+        req.body.providerCardId || null,
+        req.body.connectionId || null,
       ],
     );
 
@@ -71,7 +77,8 @@ export const getCardById = async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT id, user_id, name, type, bank, brand, last_four, color, is_default, created_at
+      `SELECT id, user_id, name, type, bank, brand, last_four, color, is_default,
+              provider, provider_card_id, connection_id, created_at
        FROM cards
        WHERE id = $1 AND user_id = $2`,
       [id, req.userId],
@@ -115,7 +122,8 @@ export const updateCard = async (req, res) => {
            color = COALESCE($6, color),
            is_default = COALESCE($7, is_default)
        WHERE id = $8 AND user_id = $9
-       RETURNING id, user_id, name, type, bank, brand, last_four, color, is_default, created_at`,
+       RETURNING id, user_id, name, type, bank, brand, last_four, color, is_default,
+                 provider, provider_card_id, connection_id, created_at`,
       [name, type, bank, brand, lastFour, color, isDefault, id, req.userId],
     );
 

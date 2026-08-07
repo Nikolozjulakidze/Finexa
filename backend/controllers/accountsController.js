@@ -24,6 +24,16 @@ const providerConfigs = {
     scope: process.env.TBC_SCOPE || "openid",
     redirectUri: `${BACKEND_URL}/api/accounts/callback/tbc`,
   },
+  paysera: {
+    name: "Paysera",
+    authUrl:
+      process.env.PAYSERA_AUTH_URL ||
+      "https://bank.paysera.com/oauth/authorize",
+    tokenUrl:
+      process.env.PAYSERA_TOKEN_URL || "https://bank.paysera.com/oauth/token",
+    scope: process.env.PAYSERA_SCOPE || "openid accounts transactions",
+    redirectUri: `${BACKEND_URL}/api/accounts/callback/paysera`,
+  },
 };
 
 const getProviderConfig = (provider) => providerConfigs[provider];
@@ -52,11 +62,9 @@ export const startBankLink = async (req, res) => {
 
   const clientId = process.env[`${provider.toUpperCase()}_CLIENT_ID`];
   if (!clientId) {
-    return res
-      .status(500)
-      .json({
-        message: `Missing ${provider.toUpperCase()} client ID configuration`,
-      });
+    return res.status(500).json({
+      message: `Missing ${provider.toUpperCase()} client ID configuration`,
+    });
   }
 
   const authUrl = new URL(config.authUrl);
@@ -106,11 +114,9 @@ export const handleBankCallback = async (req, res) => {
   const clientSecret = process.env[`${provider.toUpperCase()}_CLIENT_SECRET`];
 
   if (!clientId || !clientSecret) {
-    return res
-      .status(500)
-      .json({
-        message: `Missing ${provider.toUpperCase()} client credentials`,
-      });
+    return res.status(500).json({
+      message: `Missing ${provider.toUpperCase()} client credentials`,
+    });
   }
 
   try {

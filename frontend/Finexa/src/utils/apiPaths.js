@@ -1,7 +1,12 @@
 export const API_PATHS = {
   AUTH: {
     REGISTER: "/auth/register",
+    REGISTER_SEND_OTP: "/auth/register/send-otp",
+    REGISTER_VERIFY_OTP: "/auth/register/verify",
     LOGIN: "/auth/login",
+    GOOGLE: "/auth/google",
+    GOOGLE_SEND_OTP: "/auth/google/send-otp",
+    GOOGLE_VERIFY_OTP: "/auth/google/verify",
     ME: "/auth/me",
   },
   CATEGORIES: {
@@ -51,6 +56,8 @@ export const API_PATHS = {
   ACCOUNTS: {
     IMPORT: (connectionId) => `/accounts/import/${connectionId}`,
     SYNC: (connectionId) => `/accounts/sync/${connectionId}`,
+    LINK: (provider) => `/accounts/link/${provider}`,
+    CALLBACK: (provider) => `/accounts/callback/${provider}`,
   },
 };
 

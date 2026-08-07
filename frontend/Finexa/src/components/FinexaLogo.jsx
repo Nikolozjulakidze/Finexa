@@ -10,10 +10,11 @@ import logoPng from "../assets/logo.png";
  * @param {string} [props.title="Finexa"] - Accessible title
  */
 const FinexaLogo = ({
-  size = 48,
+  size = 50,
   className = "",
   variant = "icon",
-  title = "Nexus",
+  title = "IncomeVisor",
+  titleSize,
 }) => {
   const logoImg = (
     <img
@@ -21,22 +22,31 @@ const FinexaLogo = ({
       alt={title}
       width={size}
       height={size}
-      className={className}
-      style={{ width: size, height: size, objectFit: "contain" }}
+      className={`${className} select-none`}
+      style={{
+        width: size,
+        height: size,
+        objectFit: "contain",
+        display: "block",
+      }}
     />
   );
 
+  // Allow the wordmark size to be controlled independently of the icon so the
+  // text never becomes disproportionately large when the icon is enlarged.
   const wordmark = (
     <span
-      className="font-bold text-transparent bg-clip-text bg-linear-to-b from-[#0F3D91] via-[#1D6CF2] to-[#27D7F8]"
+      className="font-bold text-transparent bg-clip-text bg-linear-to-b from-[#0F3D91] via-[#1D6CF2] to-[#27D7F8] leading-none whitespace-nowrap"
       style={{
         fontFamily:
           "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         fontWeight: 700,
         letterSpacing: "-0.02em",
+        fontSize:
+          titleSize ?? Math.min(32, Math.max(16, Math.round(size * 0.4))),
       }}
     >
-      Nexus
+      IncomeVisor
     </span>
   );
 
@@ -47,7 +57,7 @@ const FinexaLogo = ({
   if (variant === "horizontal") {
     return (
       <div
-        className={`inline-flex items-center gap-3 ${className}`}
+        className={`inline-flex items-center gap-2.5 ${className}`}
         role="img"
         aria-label={title}
       >

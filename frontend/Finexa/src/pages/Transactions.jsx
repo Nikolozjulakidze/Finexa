@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Plus,
   Search,
@@ -28,12 +29,13 @@ import TransactionTrendChart from "../components/charts/TransactionTrendChart.js
 const Transactions = () => {
   const { user } = useAuth();
   const currency = user?.currency || "USD";
+  const [searchParams, setSearchParams] = useSearchParams();
   const [allTransactions, setAllTransactions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    search: "",
+    search: searchParams.get("search") || "",
     type: "",
     categoryId: "",
     cardId: "",
@@ -398,9 +400,19 @@ const Transactions = () => {
             />
             <input
               value={filters.search}
-              onChange={(e) =>
-                setFilters({ ...filters, search: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+                setFilters({ ...filters, search: value });
+                if (value) {
+                  const next = new URLSearchParams(searchParams);
+                  next.set("search", value);
+                  setSearchParams(next, { replace: true });
+                } else {
+                  const next = new URLSearchParams(searchParams);
+                  next.delete("search");
+                  setSearchParams(next, { replace: true });
+                }
+              }}
               placeholder="Search description or notes..."
               className="w-full pl-10 pr-4 py-2 rounded-full input-field text-sm focus-ring-accent"
             />

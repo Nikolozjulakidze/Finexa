@@ -1,34 +1,30 @@
-# Nexus — AI Chat Rewrite Plan
+# TODO — Card Connection Feature (Georgian + European Banks)
 
 ## Goal
 
-Completely rewrite `AIChat.jsx` into a production-ready, ChatGPT-style interface with a professional MediaRecorder-based voice input (no SpeechRecognition reconnect loop). Add the missing `/ai/transcribe` backend endpoint so voice works end-to-end.
+Let users connect cards to their real banks (Bank of Georgia, TBC via PSD2 OAuth, and Paysera as a European connector) so connected cards appear in the Cards page with a "live" badge, alongside manually-added cards.
 
 ## Steps
 
-- [x] Gather context (read AIChat, gemini util, aiController, aiRoutes, axios, Button, Layout, index.css)
-- [x] Confirm design direction
-- [x] Add `/ai/transcribe` backend endpoint (Groq Whisper) + multer + route
-- [x] Rewrite `src/pa/AgesIChat.jsx` from scratch (ChatGPT-style UI, MediaRecorder voice, image upload, persistence, TTS, copy, typing, auto-scroll)
-- [x] Install multer dependency
-- [x] Verify build passes
+### Backend
 
-## Follow-up: Image/Vision Fix (Groq decommission)
+- [ ] 1. Add `paysera` provider config to `backend/services/bankService.js`
+- [ ] 2. Add `paysera` to `providerConfigs` in `backend/controllers/accountsController.js` (optional cleanup)
+- [ ] 3. Extend `syncConnection` in `backend/controllers/bankController.js` to capture card info from linked bank accounts into the `cards` table
+- [ ] 4. Add migration in `backend/scripts/migrate.js` + `backend/sql/schema.sql` for new card columns (`provider`, `provider_card_id`, `connection_id`)
+- [ ] 5. Add endpoint to link/expose connected cards in `cardController.js` / `cardRoutes.js`
 
-- [x] Diagnose `400 model_decommissioned` for `llama-3.2-90b-vision-preview`
-- [x] Confirmed Groq has NO vision-capable models anymore (verified live API)
-- [x] Routed image analysis to Google Gemini via `@google/genai` (already a dependency)
-- [x] Added `GEMINI_API_KEY` to `backend/.env`
-- [x] Rewrote `chatRawWithImage` in `backend/utils/gemini.js` with model fallback list (`gemini-flash-latest`, `gemini-2.0-flash`)
-- [x] Live-tested: image analysis returns correct replies (e.g. "Pink", "Coral")
-- [x] Verified frontend build passes
+### Frontend
 
-## Follow-up: Gemini Neural TTS (Fix robotic AI voice)
+- [ ] 6. Update `Cards.jsx` with a "Connect card" flow (OAuth link for BOG/TBC/Paysera) + connected badge
+- [ ] 7. Update `CardForm.jsx` to support connection type (Manual / Bank-linked)
+- [ ] 8. Add new API paths in `frontend/Finexa/src/utils/apiPaths.js`
 
-- [x] Diagnosed bad voice = browser Web Speech API (`speechSynthesis`)
-- [x] Added `textToSpeech()` to `backend/utils/gemini.js` using Gemini `gemini-2.5-flash-preview-tts` (voice: Aoede)
-- [x] Added `POST /ai/tts` endpoint (controller + route, protected)
-- [x] Rewrote frontend `speakText()` to call backend Gemini TTS and play MP3 via `Audio` element
-- [x] Browser Web Speech API kept as fallback if Gemini TTS is unavailable
-- [x] Verified backend syntax checks pass
-- [x] Live-tested: Gemini TTS returned 182KB of audio (working, free tier, no purchase needed)
+### Docs
+
+- [ ] 9. Update `README.md` with credential setup + how card connection works
+
+## Notes
+
+- Full auto-connection of Georgian cards requires live Bank of Georgia / TBC PSD2 merchant credentials.
+- Paysera provides European open-banking once you have its API contract/credentials.

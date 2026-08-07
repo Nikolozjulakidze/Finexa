@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import AuthHero from "../components/AuthHero.jsx";
 import Spinner from "../components/Spinner.jsx";
 import FinexaLogo from "../components/FinexaLogo.jsx";
+import SocialAuthButtons from "../components/SocialAuthButtons.jsx";
 
 const Login = () => {
   const { login } = useAuth();
@@ -31,9 +32,8 @@ const Login = () => {
   return (
     <div className="min-h-screen flex bg-background text-text-primary">
       <div className="flex-1 flex flex-col px-6 sm:px-10 lg:px-14 py-8 order-1">
-        <div className="flex justify-start items-center gap-2">
-          <FinexaLogo size={122} variant="icon" />
-          <span className="font-bold text-xl text-text-primary">Nexus</span>
+        <div className="flex justify-start items-center">
+          <FinexaLogo variant="horizontal" size={64} titleSize={24} />
         </div>
 
         <div className="flex-1 flex items-center justify-center py-10">
@@ -101,6 +101,8 @@ const Login = () => {
                 )}
               </button>
             </form>
+
+            <SocialAuthButtons />
 
             <p className="text-center mt-8 text-sm text-text-secondary">
               No Account Yet?{" "}

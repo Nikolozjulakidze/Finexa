@@ -34,7 +34,7 @@ export const createLinkToken = async (userId) => {
     user: {
       client_user_id: String(userId),
     },
-    client_name: "Nexus",
+    client_name: "IncomeVisor",
     products: ["transactions"],
     country_codes: PLAID_COUNTRY_CODES,
     language: "en",

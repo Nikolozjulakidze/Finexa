@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Bell, Search } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import ThemeToggleButton from "./ThemeToggleButton.jsx";
@@ -18,7 +20,18 @@ const formatToday = () =>
 
 const Topbar = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
   const firstName = user?.name?.split(" ")[0] || "";
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const q = query.trim();
+      navigate(
+        q ? `/transactions?search=${encodeURIComponent(q)}` : "/transactions",
+      );
+    }
+  };
 
   return (
     <header className="h-20 bg-surface border-b border-border-color flex items-center justify-between px-6 shrink-0">
@@ -33,7 +46,10 @@ const Topbar = () => {
       <div className="flex items-center gap-3">
         <div className="relative hidden sm:block">
           <input
-            placeholder="Search transactions, categories..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleSearch}
+            placeholder="Search transactions..."
             className="px-4 py-2 pr-10 rounded-full input-field text-sm focus-ring-accent w-80"
           />
           <div className="absolute right-2 top-1/2 -translate-y-1/2 text-text-tertiary">

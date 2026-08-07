@@ -1,1 +1,1 @@
-# Nexus---AI-Powered-Personal-Finance-Tracker
+# Income---AI-Powered-Personal-Finance-Tracker

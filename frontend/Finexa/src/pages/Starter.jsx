@@ -112,7 +112,7 @@ const Navbar = () => {
       }`}
     >
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <FinexaLogo variant="horizontal" size={40} />
+        <FinexaLogo variant="horizontal" size={72} />
         <div className="hidden lg:flex items-center gap-8">
           {links.map((l) => (
             <a
@@ -191,7 +191,7 @@ const DashboardMock = () => {
         <span className="h-3 w-3 rounded-full bg-amber-400/80" />
         <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
         <div className="ml-4 flex-1 max-w-xs px-4 py-1.5 rounded-lg bg-surface border border-border-color text-xs text-text-secondary">
-          app.nexus.finance/dashboard
+          app.IncomeVisor.finance/dashboard
         </div>
       </div>
 
@@ -605,9 +605,9 @@ const Hero = () => {
         </h1>
 
         <p className="hero-sub text-lg md:text-xl text-text-secondary mt-6 max-w-2xl mx-auto leading-relaxed">
-          Nexus is your all-in-one platform for intelligent wealth management.
-          Track, budget, and grow your finances with unparalleled ease and
-          precision.
+          IncomeVisor is your all-in-one platform for intelligent wealth
+          management. Track, budget, and grow your finances with unparalleled
+          ease and precision.
         </p>
 
         <div className="hero-cta flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
@@ -1151,7 +1151,7 @@ const testimonials = [
     name: "Sarah Johnson",
     role: "Product Manager",
     quote:
-      "Nexus completely transformed how I manage my finances. The AI insights are spot on!",
+      "IncomeVisor completely transformed how I manage my finances. The AI insights are spot on!",
     initials: "SJ",
     color: "bg-blue-500",
   },
@@ -1409,8 +1409,8 @@ const Cta = () => (
           Ready to Take Control?
         </h2>
         <p className="text-lg text-text-secondary max-w-xl mx-auto mb-10">
-          Join thousands of users who trust Nexus to manage their financial
-          future. Sign up in minutes, free forever.
+          Join thousands of users who trust IncomeVisor to manage their
+          financial future. Sign up in minutes, free forever.
         </p>
         <Link
           to="/register"
@@ -1433,10 +1433,10 @@ const Footer = () => (
     <div className="container mx-auto px-6">
       <div className="grid md:grid-cols-4 gap-8 mb-8">
         <div className="md:col-span-2">
-          <FinexaLogo variant="horizontal" size={40} />
+          <FinexaLogo variant="horizontal" size={56} />
           <p className="text-text-secondary text-sm mt-4 max-w-sm">
-            Nexus is your all-in-one platform for intelligent wealth management.
-            Track, budget, and grow your finances with confidence.
+            IncomeVisor is your all-in-one platform for intelligent wealth
+            management. Track, budget, and grow your finances with confidence.
           </p>
         </div>
         <div>
@@ -1484,7 +1484,9 @@ const Footer = () => (
         </div>
       </div>
       <div className="border-t border-border-color pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-text-secondary">
-        <p>&copy; {new Date().getFullYear()} Nexus. All rights reserved.</p>
+        <p>
+          &copy; {new Date().getFullYear()} IncomeVisor. All rights reserved.
+        </p>
         <div className="flex gap-6">
           <a className="hover:text-text-primary transition cursor-pointer">
             Privacy Policy

@@ -30,14 +30,8 @@ const Sidebar = () => {
 
   return (
     <aside className="w-64 bg-sidebar-background hidden lg:flex flex-col shrink-0 p-4 card-style">
-      <div className="h-16 flex items-center gap-3 px-2">
-        <div className="rounded-xl flex items-center justify-center">
-          <FinexaLogo size={76} variant="icon" />
-        </div>
-        <div>
-          <div className="text-lg font-extrabold text-text-primary">Nexus</div>
-          <div className="text-xs text-text-secondary">Personal Finance</div>
-        </div>
+      <div className="h-16 flex items-center px-2">
+        <FinexaLogo variant="horizontal" size={56} titleSize={22} />
       </div>
 
       <nav className="flex-1 mt-4 p-2 space-y-1">

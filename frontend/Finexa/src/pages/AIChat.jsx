@@ -1013,7 +1013,7 @@ const AIChat = () => {
               ) : (
                 <span>
                   {voiceSupported
-                    ? "Nexus AI can make mistakes. Verify important information."
+                    ? "Visor can make mistakes. Verify important information."
                     : "Voice input is not supported in this browser."}
                 </span>
               )}

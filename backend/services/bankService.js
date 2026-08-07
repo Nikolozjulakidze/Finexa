@@ -35,6 +35,22 @@ const providerConfigs = {
       process.env.TBC_TRANSACTIONS_URL ||
       "https://api.tbcbank.ge/psd2/openbanking/v1/accounts/{accountId}/transactions",
   },
+  paysera: {
+    name: "Paysera",
+    authUrl:
+      process.env.PAYSERA_AUTH_URL ||
+      "https://bank.paysera.com/oauth/authorize",
+    tokenUrl:
+      process.env.PAYSERA_TOKEN_URL || "https://bank.paysera.com/oauth/token",
+    scope: process.env.PAYSERA_SCOPE || "openid accounts transactions",
+    redirectUri: `${BACKEND_URL}/api/accounts/callback/paysera`,
+    accountsUrl:
+      process.env.PAYSERA_ACCOUNTS_URL ||
+      "https://bank.paysera.com/api/v1/accounts",
+    transactionsUrl:
+      process.env.PAYSERA_TRANSACTIONS_URL ||
+      "https://bank.paysera.com/api/v1/accounts/{accountId}/transactions",
+  },
 };
 
 const getProviderConfig = (provider) => providerConfigs[provider];
